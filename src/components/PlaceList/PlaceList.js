@@ -1,22 +1,36 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 
 import ListItem from '../ListItem/ListItem';
 
 const placeList = (props) => {
-    const placesOutput = props.places.map((place, i) => (
-        // <Text key={i}>{place}</Text>
-        <ListItem 
-            key={i} 
-            placeName={place} 
-            onItemPressed={() => props.onItemDeleted(i)} 
-        />
-    ))
+    // old way before FlatList
+    // const placesOutput = props.places.map((place, i) => (
+    //     // <Text key={i}>{place}</Text>
+    //     <ListItem 
+    //         key={i} 
+    //         placeName={place} 
+    //         onItemPressed={() => props.onItemDeleted(i)} 
+    //     />
+    // ))
     
     return (
-        <View style={styles.listContainer}>
-            {placesOutput}
-        </View>
+        // old way before FlatList
+        // <ScrollView style={styles.listContainer}>
+        //     {placesOutput}
+        // </ScrollView>
+        <FlatList 
+            style={styles.listContainer}
+            data={props.places}
+            renderItem={(info) => (
+                <ListItem
+                    //.value comes from how we wrote the object in this.setState in the function handler in App.js
+                    placeName={info.item.name}
+                    placeImage={info.item.image}
+                    onItemPressed={() => props.onItemSelected(info.item.key)}
+                />
+            )}
+        />
     )
 }
 
