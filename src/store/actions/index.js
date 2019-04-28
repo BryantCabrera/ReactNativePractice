@@ -1,3 +1,6 @@
 //bundles all exports so you can conveniently import from this file only
 
-export { addPlace, deletePlace, selectPlace, deselectPlace } from './places';
+// Don't need the following anymore after connecting to react-native-navigation
+// export { addPlace, deletePlace, selectPlace, deselectPlace } from './places';
+
+export { addPlace, deletePlace } from './places';

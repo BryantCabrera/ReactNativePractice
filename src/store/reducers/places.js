@@ -1,8 +1,9 @@
-import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from '../actions/actionTypes';
+// import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from '../actions/actionTypes';
+import { ADD_PLACE, DELETE_PLACE } from '../actions/actionTypes';
 
 const initialState = {
-    places: [],
-    selectedPlace: null
+    places: []
+    // selectedPlace: null
 }
 
 //state is the old state
@@ -28,18 +29,19 @@ const reducer = (state = initialState, action) => {
                 }),
                 selectedPlace: null
             };
-        case SELECT_PLACE:
-            return {
-                ...state,
-                selectedPlace: state.places.find(place => {
-                    return place.key === action.placeKey;
-                })
-            };
-        case DELETE_PLACE:
-            return {
-                ...state,
-                selectedPlace: null
-            };
+        // Don't need the following anymore after connecting to react-native-navigation
+        // case SELECT_PLACE:
+        //     return {
+        //         ...state,
+        //         selectedPlace: state.places.find(place => {
+        //             return place.key === action.placeKey;
+        //         })
+        //     };
+        // case DESELECT_PLACE:
+        //     return {
+        //         ...state,
+        //         selectedPlace: null
+        //     };
         default:
             return state;
     }
