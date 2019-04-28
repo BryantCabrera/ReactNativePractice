@@ -25,9 +25,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 places: state.places.filter(place => {
-                    return place.key !== state.selectedPlace.key;
-                }),
-                selectedPlace: null
+                    // Before using connect method with Navigation on PlaceDetail.js
+                    // return place.key !== state.selectedPlace.key;
+                    return place.key !== action.placeKey;
+                })
+                // selectedPlace: null
             };
         // Don't need the following anymore after connecting to react-native-navigation
         // case SELECT_PLACE:

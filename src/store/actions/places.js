@@ -8,9 +8,17 @@ export const addPlace = (placeName) => {
     };
 };
 
-export const deletePlace = () => {
+// Before using connect method with Navigation on PlaceDetail.js
+// export const deletePlace = () => {
+//     return {
+//         type: DELETE_PLACE
+//     };
+// };
+
+export const deletePlace = (key) => {
     return {
-        type: DELETE_PLACE
+        type: DELETE_PLACE,
+        placeKey: key
     };
 };
 
