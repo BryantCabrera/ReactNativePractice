@@ -6,7 +6,25 @@ import { connect } from "react-redux";
 import PlaceList from "../../components/PlaceList/PlaceList";
 
 class FindPlaceScreen extends Component {
+    constructor(props) {
+        super(props);
 
+        // Here, we specify a navigation method whenever a navigation event occurs
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
+
+    // arrow function syntax lets you avoid binding "this"
+    onNavigatorEvent = event => {
+        // these types are ids defined in startMainTabs.js leftButtons property
+        if (event.type === "NavBarButtonPress") {
+            if (event.id === "sideDrawerToggle") {
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
+            }
+        }
+    }
+    
     itemSelectedHandler = key => {
         const selPlace = this.props.places.find(place => {
             return place.key === key;

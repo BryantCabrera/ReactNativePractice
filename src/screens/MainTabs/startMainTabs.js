@@ -40,12 +40,12 @@ const startTabs = () => {
                         ]
                     }
                 }
-            ]
-            // drawer: {
-            //     left: {
-            //         screen: "awesome-places.SideDrawer"
-            //     }
-            // }
+            ],
+            drawer: {
+                left: {
+                    screen: "awesome-places.SideDrawer"
+                }
+            }
         });
     });
 };

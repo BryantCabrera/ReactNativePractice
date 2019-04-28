@@ -9,6 +9,25 @@ import { addPlace } from '../../store/actions/index';
 //don't need to register this as a component for navigation because you are embedding it into a screen, not loading it as a screen
 
 class SharePlaceScreen extends Component {
+    constructor(props) {
+        super(props);
+
+        // Here, we specify a navigation method whenever a navigation event occurs
+        this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
+
+    // arrow function syntax lets you avoid binding "this"
+    onNavigatorEvent = event => {
+        // these types are ids defined in startMainTabs.js leftButtons property
+        if (event.type === "NavBarButtonPress") {
+            if (event.id === "sideDrawerToggle") {
+                this.props.navigator.toggleDrawer({
+                    side: "left"
+                });
+            }
+        }
+    }
+
     placeAddedHandler = placeName => {
         this.props.onAddPlace(placeName);
     }
