@@ -6,7 +6,7 @@
 // import React from 'react';
 // import { AppRegistry } from 'react-native';
 //Provider component will be connected to our store
-    //a wrapper for our root ocmponent
+//a wrapper for our root ocmponent
 // import { Provider } from 'react-redux';
 // import App from './App';
 // import { name as appName } from './app.json';
@@ -27,8 +27,9 @@
 
 
 // With React Native Nagivation
-import { AppRegistry } from 'react-native';
-import { name as appName } from './app.json';
+//no longer need to use AppRegistry
+// import { AppRegistry } from 'react-native';
 import App from './App';
 
-AppRegistry.registerComponent(appName, () => App);
+//no longer need to use AppRegistry
+// AppRegistry.registerComponent(appName, () => App);
