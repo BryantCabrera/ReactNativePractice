@@ -15,7 +15,10 @@ class AuthScreen extends Component {
     render() {
         return (
             <View>
-                <Text>Auth Screen</Text>
+                {/* Before creating HeadingText.js component <Text>Auth Screen</Text> */}
+                <MainText>
+                    <HeadingText>Please Log In</HeadingText>
+                </MainText>
                 <Button title="Login" onPress={this.loginHandler} />
                 <View style={styles.inputContainer}>
                     {/* Before modulatizing components <TextInput placeholder="Your E-Mail Address" tyle={styles.input} />
