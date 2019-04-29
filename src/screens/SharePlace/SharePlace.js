@@ -26,6 +26,10 @@ import PickLocation from "../../components/PickLocation/PickLocation";
 //don't need to register this as a component for navigation because you are embedding it into a screen, not loading it as a screen
 
 class SharePlaceScreen extends Component {
+    state = {
+        placeName: ""
+    };
+
     constructor(props) {
         super(props);
 
@@ -45,9 +49,22 @@ class SharePlaceScreen extends Component {
         }
     }
 
-    placeAddedHandler = placeName => {
-        this.props.onAddPlace(placeName);
-    }
+    // placeAddedHandler = placeName => {
+    //     this.props.onAddPlace(placeName);
+    // }
+
+    // Added halfway through Module 7
+    placeNameChangedHandler = val => {
+        this.setState({
+            placeName: val
+        });
+    };
+
+    placeAddedHandler = () => {
+        if (this.state.placeName.trim() !== "") {
+            this.props.onAddPlace(this.state.placeName);
+        }
+    };
 
     render() {
         return (
@@ -78,9 +95,12 @@ class SharePlaceScreen extends Component {
                         <Button title="Locate Me" />
                     </View> */}
                     {/* <DefaultInput placeholder="Place Name" /> */}
-                    <PlaceInput />
+                    <PlaceInput
+                        placeName={this.state.placeName}
+                        onChangeText={this.placeNameChangedHandler}
+                    />
                     <View style={styles.button}>
-                        <Button title="Share the Place!" />
+                        <Button title="Share the Place!" onPress={this.placeAddedHandler} />
                     </View>
                 </View>
             </ScrollView>
