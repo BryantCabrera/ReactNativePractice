@@ -16,7 +16,7 @@ class AuthScreen extends Component {
     render() {
         return (
             <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-                <View>
+                <View style={styles.container}>
                     {/* Before creating HeadingText.js component <Text>Auth Screen</Text> */}
                     <MainText>
                         <HeadingText>Please Log In</HeadingText>
