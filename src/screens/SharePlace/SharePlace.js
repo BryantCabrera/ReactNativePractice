@@ -14,10 +14,14 @@ import { connect } from 'react-redux';
 // import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import { addPlace } from '../../store/actions/index';
 // Imports for Module 7: Styling
-import DefaultInput from "../../components/UI/DefaultInput/DefaultInput";
+// import DefaultInput from "../../components/UI/DefaultInput/DefaultInput";
+import PlaceInput from "../../components/PlaceInput/PlaceInput";
 import MainText from "../../components/UI/MainText/MainText";
 import HeadingText from "../../components/UI/HeadingText/HeadingText";
-import imagePlaceholder from "../../assets/beautiful-place.jpg";
+// Moved to PickImage.js
+// import imagePlaceholder from "../../assets/beautiful-place.jpg";
+import PickImage from "../../components/PickImage/PickImage";
+import PickLocation from "../../components/PickLocation/PickLocation";
 
 //don't need to register this as a component for navigation because you are embedding it into a screen, not loading it as a screen
 
@@ -59,19 +63,22 @@ class SharePlaceScreen extends Component {
                     <MainText>
                         <HeadingText>Share a Place with us!</HeadingText>
                     </MainText>
-                    <View style={styles.placeholder}>
+                    <PickImage />
+                    <PickLocation />
+                    {/* Moved to PickImage.js <View style={styles.placeholder}>
                         <Image source={imagePlaceholder} style={styles.previewImage} />
                     </View>
                     <View style={styles.button}>
                         <Button title="Pick Image" />
-                    </View>
-                    <View style={styles.placeholder}>
+                    </View> */}
+                    {/* Moved to PickLocation.js <View style={styles.placeholder}>
                         <Text>Map</Text>
                     </View>
                     <View style={styles.button}>
                         <Button title="Locate Me" />
-                    </View>
-                    <DefaultInput placeholder="Place Name" />
+                    </View> */}
+                    {/* <DefaultInput placeholder="Place Name" /> */}
+                    <PlaceInput />
                     <View style={styles.button}>
                         <Button title="Share the Place!" />
                     </View>
