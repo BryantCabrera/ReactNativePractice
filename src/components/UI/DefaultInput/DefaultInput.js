@@ -16,7 +16,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#eee",
         padding: 5,
-        margin: 8
+        // need to split margins for Module 7: View Mode responsiveness to avoid left and right margins messing with flexbox centering
+        // margin: 8
+        marginTop: 8,
+        marginBottom: 8
     }
 });
 

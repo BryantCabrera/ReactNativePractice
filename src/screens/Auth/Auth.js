@@ -14,15 +14,35 @@ class AuthScreen extends Component {
         viewMode: Dimensions.get("window").height > 500 ? "portrait" : "landscape"
     };
 
+    // Before we cleaned the Event Listener up in Module 7
+    // constructor(props) {
+    //     super(props);
+    //     Dimensions.addEventListener("change", dims => {
+    //         this.setState({
+    //             viewMode:
+    //                 Dimensions.get("window").height > 500 ? "portrait" : "landscape"
+    //         });
+    //     });
+    // }
+
     constructor(props) {
         super(props);
-        Dimensions.addEventListener("change", dims => {
-            this.setState({
-                viewMode:
-                    Dimensions.get("window").height > 500 ? "portrait" : "landscape"
-            });
+        Dimensions.addEventListener("change", this.updateStyles);
+    }
+
+    componentWillUnmount() {
+        // Modularized the function to remove so that we could call it in this life cycle hook
+        Dimensions.removeEventListener("change", this.updateStyles);
+    }
+
+    // Modularized this function to prevent memory leaks from not detaching event listener
+    updateStyles = (dims) => {
+        this.setState({
+            viewMode:
+                dims.window.height > 500 ? "portrait" : "landscape"
         });
     }
+
 
     loginHandler = () => {
         startMainTabs();

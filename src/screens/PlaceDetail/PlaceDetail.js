@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { connect } from "react-redux";
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -20,6 +20,25 @@ class PlaceDetail extends Component {
     //     );
     // }
 
+    state = {
+        viewMode: "portrait"
+    };
+
+    constructor(props) {
+        super(props);
+        Dimensions.addEventListener("change", this.updateStyles);
+    }
+
+    componentWillUnmount() {
+        Dimensions.removeEventListener("change", this.updateStyles);
+    }
+
+    updateStyles = dims => {
+        this.setState({
+            viewMode: dims.window.height > 500 ? "portrait" : "landscape"
+        });
+    };
+
     placeDeletedHandler = () => {
         this.props.onDeletePlace(this.props.selectedPlace.key);
 
@@ -29,35 +48,70 @@ class PlaceDetail extends Component {
 
     render() {
         return (
-            // <Modal
-            // onRequestClose={props.onModalClosed}
-            // visible={props.selectedPlace !== null}
-            // animationType="slide">
-            // <View style={styles.modalContainer}>
-            <View style={styles.container}>
-                {/* <Image source={props.selectedPlace ? props.selectedPlace.image : null}/>
-                    <Text>{props.selectedPlace.name}</Text> */}
-                {/* replaced with connection to React Native Navigation {modalContent} */}
-                <View>
-                    <Image source={this.props.selectedPlace.image} style={styles.placeImage} />
-                    <Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
+            // // Before cleaning this up in Module 7: Assignment 2
+            // // <Modal
+            // // onRequestClose={props.onModalClosed}
+            // // visible={props.selectedPlace !== null}
+            // // animationType="slide">
+            // // <View style={styles.modalContainer}>
+            // <View style={styles.container}>
+            //     {/* <Image source={props.selectedPlace ? props.selectedPlace.image : null}/>
+            //         <Text>{props.selectedPlace.name}</Text> */}
+            //     {/* replaced with connection to React Native Navigation {modalContent} */}
+            //     <View>
+            //         <Image source={this.props.selectedPlace.image} style={styles.placeImage} />
+            //         <Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
+            //     </View>
+            //     <View>
+            //         {/* <Button title="Delete" color="red" onPress={props.onItemDeleted}/> */}
+            //         {/* before connecting React Native Navigator: <TouchableOpacity onPress={props.onItemDeleted}> */}
+            //         <TouchableOpacity onPress={this.placeDeletedHandler}>
+            //             <View style={styles.deleteButton}>
+            //                 <Icon
+            //                     size={30}
+            //                     // name="ios-trash"
+            //                     name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
+            //                     color="red" />
+            //             </View>
+            //         </TouchableOpacity>
+            //         {/* before connecting React Native Navigator: <Button title="Close" onPress={props.onModalClosed}/> */}
+            //     </View>
+            // </View>
+            // // </Modal>
+
+            <View
+                style={[
+                    styles.container,
+                    this.state.viewMode === "portrait"
+                        ? styles.portraitContainer
+                        : styles.landscapeContainer
+                ]}
+            >
+                <View style={styles.subContainer}>
+                    <Image
+                        source={this.props.selectedPlace.image}
+                        style={styles.placeImage}
+                    />
                 </View>
-                <View>
-                    {/* <Button title="Delete" color="red" onPress={props.onItemDeleted}/> */}
-                    {/* before connecting React Native Navigator: <TouchableOpacity onPress={props.onItemDeleted}> */}
-                    <TouchableOpacity onPress={this.placeDeletedHandler}>
-                        <View style={styles.deleteButton}>
-                            <Icon
-                                size={30}
-                                // name="ios-trash"
-                                name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
-                                color="red" />
-                        </View>
-                    </TouchableOpacity>
-                    {/* before connecting React Native Navigator: <Button title="Close" onPress={props.onModalClosed}/> */}
+                <View style={styles.subContainer}>
+                    <View>
+                        <Text style={styles.placeName}>
+                            {this.props.selectedPlace.name}
+                        </Text>
+                    </View>
+                    <View>
+                        <TouchableOpacity onPress={this.placeDeletedHandler}>
+                            <View style={styles.deleteButton}>
+                                <Icon
+                                    size={30}
+                                    name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
+                                    color="red"
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-            // </Modal>
         );
     }
 }
@@ -68,6 +122,12 @@ const styles = StyleSheet.create({
     // },
     container: {
         margin: 22
+    },
+    portraitContainer: {
+        flexDirection: "column"
+    },
+    landscapeContainer: {
+        flexDirection: "row"
     },
     placeImage: {
         width: "100%",
@@ -80,6 +140,9 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         alignItems: "center"
+    },
+    subContainer: {
+        flex: 1
     }
 });
 
