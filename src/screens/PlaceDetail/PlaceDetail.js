@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import { connect } from "react-redux";
 
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -47,7 +47,11 @@ class PlaceDetail extends Component {
                     {/* before connecting React Native Navigator: <TouchableOpacity onPress={props.onItemDeleted}> */}
                     <TouchableOpacity onPress={this.placeDeletedHandler}>
                         <View style={styles.deleteButton}>
-                            <Icon size={30} name="ios-trash" color="red" />
+                            <Icon
+                                size={30}
+                                // name="ios-trash"
+                                name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
+                                color="red" />
                         </View>
                     </TouchableOpacity>
                     {/* before connecting React Native Navigator: <Button title="Close" onPress={props.onModalClosed}/> */}

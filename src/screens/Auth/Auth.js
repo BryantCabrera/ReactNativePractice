@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button, TextInput, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, Button, TextInput, StyleSheet, ImageBackground, Dimensions } from 'react-native';
 
 import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from "../../components/UI/DefaultInput/DefaultInput";
@@ -9,35 +9,108 @@ import ButtonWithBackground from "../../components/UI/ButtonWithBackground/Butto
 import backgroundImage from "../../assets/background.jpg";
 
 class AuthScreen extends Component {
+    // Setting the state won’t dynamically update the state, but the event listener in the constructor will
+    state = {
+        viewMode: Dimensions.get("window").height > 500 ? "portrait" : "landscape"
+    };
+
+    constructor(props) {
+        super(props);
+        Dimensions.addEventListener("change", dims => {
+            this.setState({
+                viewMode:
+                    Dimensions.get("window").height > 500 ? "portrait" : "landscape"
+            });
+        });
+    }
+
     loginHandler = () => {
         startMainTabs();
     }
 
     render() {
+        let headingText = null;
+
+        if (this.state.viewMode === "portrait") {
+            headingText = (
+                <MainText>
+                    <HeadingText>Please Log In</HeadingText>
+                </MainText>
+            );
+        }
+
         return (
+            // Before Module 7: Updating based on View Mode
+            // <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+            //     <View style={styles.container}>
+            //         {/* Before creating HeadingText.js component <Text>Auth Screen</Text> */}
+            //         <MainText>
+            //             <HeadingText>Please Log In</HeadingText>
+            //         </MainText>
+            //         {/* <Button title="Login" onPress={this.loginHandler} /> */}
+            //         <ButtonWithBackground color="#29aaf4" onPress={() => alert("Hello")}>
+            //             Switch to Login
+            //         </ButtonWithBackground>
+            //         <View style={styles.inputContainer}>
+            //             {/* Before modulatizing components <TextInput placeholder="Your E-Mail Address" tyle={styles.input} />
+            //             <TextInput placeholder="Password" tyle={styles.input} />
+            //             <TextInput placeholder="Confirm Password" tyle={styles.input} /> */}
+
+            //             <DefaultInput
+            //                 placeholder="Your E-Mail Address"
+            //                 style={styles.input}
+            //             />
+            //             <DefaultInput placeholder="Password" style={styles.input} />
+            //             <DefaultInput placeholder="Confirm Password" style={styles.input} />
+            //         </View>
+            //         {/* <Button title="Submit" onPress={this.loginHandler} /> */}
+            //         <ButtonWithBackground color="#29aaf4" onPress={this.loginHandler}>
+            //             Submit
+            //         </ButtonWithBackground>
+            //     </View>
+            // </ImageBackground>
+
             <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
                 <View style={styles.container}>
-                    {/* Before creating HeadingText.js component <Text>Auth Screen</Text> */}
-                    <MainText>
-                        <HeadingText>Please Log In</HeadingText>
-                    </MainText>
-                    {/* <Button title="Login" onPress={this.loginHandler} /> */}
+                    {headingText}
                     <ButtonWithBackground color="#29aaf4" onPress={() => alert("Hello")}>
                         Switch to Login
                     </ButtonWithBackground>
                     <View style={styles.inputContainer}>
-                        {/* Before modulatizing components <TextInput placeholder="Your E-Mail Address" tyle={styles.input} />
-                        <TextInput placeholder="Password" tyle={styles.input} />
-                        <TextInput placeholder="Confirm Password" tyle={styles.input} /> */}
-
                         <DefaultInput
                             placeholder="Your E-Mail Address"
                             style={styles.input}
                         />
-                        <DefaultInput placeholder="Password" style={styles.input} />
-                        <DefaultInput placeholder="Confirm Password" style={styles.input} />
+                        <View
+                            style={
+                                this.state.viewMode === "portrait"
+                                    ? styles.portraitPasswordContainer
+                                    : styles.landscapePasswordContainer
+                            }
+                        >
+                            <View
+                                style={
+                                    this.state.viewMode === "portrait"
+                                        ? styles.portraitPasswordWrapper
+                                        : styles.landscapePasswordWrapper
+                                }
+                            >
+                                <DefaultInput placeholder="Password" style={styles.input} />
+                            </View>
+                            <View
+                                style={
+                                    this.state.viewMode === "portrait"
+                                        ? styles.portraitPasswordWrapper
+                                        : styles.landscapePasswordWrapper
+                                }
+                            >
+                                <DefaultInput
+                                    placeholder="Confirm Password"
+                                    style={styles.input}
+                                />
+                            </View>
+                        </View>
                     </View>
-                    {/* <Button title="Submit" onPress={this.loginHandler} /> */}
                     <ButtonWithBackground color="#29aaf4" onPress={this.loginHandler}>
                         Submit
                     </ButtonWithBackground>
@@ -63,6 +136,20 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: "#eee",
         borderColor: "#bbb"
+    },
+    landscapePasswordContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    portraitPasswordContainer: {
+        flexDirection: "column",
+        justifyContent: "flex-start"
+    },
+    landscapePasswordWrapper: {
+        width: "45%"
+    },
+    portraitPasswordWrapper: {
+        width: "100%"
     }
 });
 

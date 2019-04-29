@@ -68,7 +68,7 @@ import DefaultInput from "../UI/DefaultInput/DefaultInput";
 
 // export default PlaceInput;
 
-placeInput = props => (
+const placeInput = props => (
     <DefaultInput
         placeholder="Place Name"
         value={props.placeName}
