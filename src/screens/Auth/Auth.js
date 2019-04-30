@@ -11,6 +11,7 @@ import {
     Keyboard,
     TouchableWithoutFeedback
 } from 'react-native';
+import { connect } from "react-redux";
 
 import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from "../../components/UI/DefaultInput/DefaultInput";
@@ -19,6 +20,7 @@ import MainText from "../../components/UI/MainText/MainText";
 import ButtonWithBackground from "../../components/UI/ButtonWithBackground/ButtonWithBackground";
 import backgroundImage from "../../assets/background.jpg";
 import validate from "../../utility/validation";
+import { tryAuth } from "../../store/actions/index";
 
 class AuthScreen extends Component {
     // Setting the state won’t dynamically update the state, but the event listener in the constructor will
@@ -76,6 +78,8 @@ class AuthScreen extends Component {
         Dimensions.removeEventListener("change", this.updateStyles);
     }
 
+    
+
     // Modularized this function to prevent memory leaks from not detaching event listener
     updateStyles = (dims) => {
         this.setState({
@@ -86,6 +90,14 @@ class AuthScreen extends Component {
 
 
     loginHandler = () => {
+        // don't need confirmPassword here, that was just for frontend
+        const authData = {
+            email: this.state.controls.email.value,
+            password: this.state.controls.password.value
+        };
+
+        this.props.onLogin(authData);
+
         startMainTabs();
     }
 
@@ -339,4 +351,10 @@ const styles = StyleSheet.create({
     }
 });
 
-export default AuthScreen;
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogin: authData => dispatch(tryAuth(authData))
+    };
+};
+
+export default connect(null, mapDispatchToProps)(AuthScreen);

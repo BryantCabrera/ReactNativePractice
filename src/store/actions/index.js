@@ -4,3 +4,5 @@
 // export { addPlace, deletePlace, selectPlace, deselectPlace } from './places';
 
 export { addPlace, deletePlace } from './places';
+// For Module 8: Validation
+export { tryAuth } from './auth';
