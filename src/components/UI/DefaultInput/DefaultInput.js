@@ -20,6 +20,11 @@ const styles = StyleSheet.create({
         // margin: 8
         marginTop: 8,
         marginBottom: 8
+    },
+    //  Added in Module 8: Validation
+    invalid: {
+        backgroundColor: '#f9c0c0',
+        borderColor: "red"
     }
 });
 
