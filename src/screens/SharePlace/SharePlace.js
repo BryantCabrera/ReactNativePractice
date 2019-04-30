@@ -37,12 +37,14 @@ class SharePlaceScreen extends Component {
         // placeName: ""
 
         // For Module 8: Validation
-        placeName: {
-            value: "",
-            valid: false,
-            touched: false,
-            validationRules: {
-                notEmpty: true
+        controls: {
+            placeName: {
+                value: "",
+                valid: false,
+                touched: false,
+                validationRules: {
+                    notEmpty: true
+                }
             }
         }
     };
