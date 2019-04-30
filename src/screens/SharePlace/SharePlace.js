@@ -26,6 +26,12 @@ import PickLocation from "../../components/PickLocation/PickLocation";
 //don't need to register this as a component for navigation because you are embedding it into a screen, not loading it as a screen
 
 class SharePlaceScreen extends Component {
+    // static keyword can be accessed without having to instantiate the class
+    // Has to be named “navigatorStyle”
+    static navigatorStyle = {
+        navBarButtonColor: "orange"
+    }
+
     state = {
         placeName: ""
     };

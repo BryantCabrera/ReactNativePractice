@@ -47,10 +47,18 @@ const startTabs = () => {
                     }
                 }
             ],
+            //  lets you customize tab colors in iOS; Module 7
+            tabsStyle: {
+                tabBarSelectedButtonColor: "orange"
+            },
             drawer: {
                 left: {
                     screen: "awesome-places.SideDrawer"
                 }
+            },
+            //  lets you customize tab colors in Android; Module 7
+            appStyle: {
+                tabBarSelectedButtonColor: "orange"
             }
         });
     });
