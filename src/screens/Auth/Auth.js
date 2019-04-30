@@ -78,7 +78,15 @@ class AuthScreen extends Component {
         Dimensions.removeEventListener("change", this.updateStyles);
     }
 
-    
+    // Added in Module 8: Validation
+    // Toggles between signup and login
+    switchAuthModeHandler = () => {
+        this.setState(prevState => {
+            return {
+                authMode: prevState.authMode === "login" ? "signup" : "login"
+            };
+        });
+    };
 
     // Modularized this function to prevent memory leaks from not detaching event listener
     updateStyles = (dims) => {
@@ -167,6 +175,28 @@ class AuthScreen extends Component {
                 <MainText>
                     <HeadingText>Please Log In</HeadingText>
                 </MainText>
+            );
+        }
+
+        if (this.state.authMode === "signup") {
+            confirmPasswordControl = (
+                <View
+                    style={
+                        this.state.viewMode === "portrait"
+                            ? styles.portraitPasswordWrapper
+                            : styles.landscapePasswordWrapper
+                    }
+                >
+                    <DefaultInput
+                        placeholder="Confirm Password"
+                        style={styles.input}
+                        value={this.state.controls.confirmPassword.value}
+                        onChangeText={val => this.updateInputState("confirmPassword", val)}
+                        valid={this.state.controls.confirmPassword.valid}
+                        touched={this.state.controls.confirmPassword.touched}
+                        secureTextEntry
+                    />
+                </View>
             );
         }
 
