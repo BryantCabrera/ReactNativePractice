@@ -280,6 +280,7 @@ class AuthScreen extends Component {
             // </ImageBackground>
 
             <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+                {/* behavior="padding" essentially pushes up the element */}
                 <KeyboardAvoidingView style={styles.container} behavior="padding">
                     {headingText}
                     <ButtonWithBackground
@@ -288,6 +289,7 @@ class AuthScreen extends Component {
                     >
                         Switch to {this.state.authMode === "login" ? "Sign Up" : "Login"}
                     </ButtonWithBackground>
+                    {/* TouchableWithoutFeedback only takes 1 child element */}
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View style={styles.inputContainer}>
                             <DefaultInput
