@@ -22,6 +22,8 @@ import validate from "../../utility/validation";
 
 class AuthScreen extends Component {
     // Setting the state won’t dynamically update the state, but the event listener in the constructor will
+        //	PROBLEM: if you refresh Auth, inupt will all turn red when empty
+        // SOLUTION: keep track of when user touched the input with touched property
     state = {
         viewMode: Dimensions.get("window").height > 500 ? "portrait" : "landscape",
         authMode: "login",

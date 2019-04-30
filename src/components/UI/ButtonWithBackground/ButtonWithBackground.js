@@ -6,10 +6,21 @@ import { TouchableOpacity, TouchableNativeFeedback, Text, View, StyleSheet, Plat
 
 const buttonWithBackground = props => {
     const content = (
-        <View style={[styles.button, { backgroundColor: props.color }]}>
-            <Text>{props.children}</Text>
+        <View style={[
+            styles.button,
+            { backgroundColor: props.color },
+            props.disabled ? styles.disabled : null
+        ]}
+        >
+            <Text style={props.disabled ? styles.disabledText : null}>{props.children}</Text>
         </View>
     );
+
+    // Added in Module 8: Validation
+    // Disables button and returns an untouchable element
+    if (props.disabled) {
+        return content;
+    }
 
     if (Platform.OS === "android") {
         return (
@@ -34,6 +45,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 1,
         borderColor: "black"
+    },
+    // Added in Module 8: Validation
+    disabled: {
+        backgroundColor: "#eee",
+        borderColor: "#aaa"
+    },
+    disabledText: {
+        color: "#aaa"
     }
 });
 
