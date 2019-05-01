@@ -22,6 +22,7 @@ import HeadingText from "../../components/UI/HeadingText/HeadingText";
 // import imagePlaceholder from "../../assets/beautiful-place.jpg";
 import PickImage from "../../components/PickImage/PickImage";
 import PickLocation from "../../components/PickLocation/PickLocation";
+import validate from "../../utility/validation";
 
 //don't need to register this as a component for navigation because you are embedding it into a screen, not loading it as a screen
 
@@ -33,7 +34,19 @@ class SharePlaceScreen extends Component {
     }
 
     state = {
-        placeName: ""
+        // placeName: ""
+
+        // For Module 8: Validation
+        controls: {
+            placeName: {
+                value: "",
+                valid: false,
+                touched: false,
+                validationRules: {
+                    notEmpty: true
+                }
+            }
+        }
     };
 
     constructor(props) {
@@ -61,14 +74,34 @@ class SharePlaceScreen extends Component {
 
     // Added halfway through Module 7
     placeNameChangedHandler = val => {
-        this.setState({
-            placeName: val
+        // this.setState({
+        //     placeName: val
+        // });
+
+        // For Module 8: Validation
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    placeName: {
+                        ...prevState.controls.placeName,
+                        value: val,
+                        valid: validate(val, prevState.controls.placeName.validationRules),
+                        touched: true
+                    }
+                }
+            };
         });
     };
 
     placeAddedHandler = () => {
-        if (this.state.placeName.trim() !== "") {
-            this.props.onAddPlace(this.state.placeName);
+        // if (this.state.placeName.trim() !== "") {
+        //     this.props.onAddPlace(this.state.placeName);
+        // }
+
+        // For Module 8: Validation
+        if (this.state.controls.placeName.value.trim() !== "") {
+            this.props.onAddPlace(this.state.controls.placeName.value);
         }
     };
 
@@ -102,11 +135,16 @@ class SharePlaceScreen extends Component {
                     </View> */}
                     {/* <DefaultInput placeholder="Place Name" /> */}
                     <PlaceInput
-                        placeName={this.state.placeName}
+                        // placeName={this.state.placeName}
+                        placeData={this.state.controls.placeName}
                         onChangeText={this.placeNameChangedHandler}
                     />
                     <View style={styles.button}>
-                        <Button title="Share the Place!" onPress={this.placeAddedHandler} />
+                        <Button
+                            title="Share the Place!"
+                            onPress={this.placeAddedHandler}
+                            disabled={!this.state.controls.placeName.valid}
+                        />
                     </View>
                 </View>
             </ScrollView>

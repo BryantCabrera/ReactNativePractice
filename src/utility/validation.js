@@ -38,7 +38,9 @@ const equalToValidator = (val, checkValue) => {
     return val === checkValue;
 };
 
+// for SharePlace.js validation
 const notEmptyValidator = val => {
+    // .trim() removes any extra whitespace at the beginning or end
     return val.trim() !== "";
 };
 

@@ -169,6 +169,7 @@ class AuthScreen extends Component {
 
     render() {
         let headingText = null;
+        let confirmPasswordControl = null;
 
         if (this.state.viewMode === "portrait") {
             headingText = (

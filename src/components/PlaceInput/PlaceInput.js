@@ -71,8 +71,12 @@ import DefaultInput from "../UI/DefaultInput/DefaultInput";
 const placeInput = props => (
     <DefaultInput
         placeholder="Place Name"
-        value={props.placeName}
+        // value={props.placeName}
         onChangeText={props.onChangeText}
+        // For Module 8: Validation
+        value={props.placeData.value}
+        valid={props.placeData.valid}
+        touched={props.placeData.touched}
     />
 );
 
