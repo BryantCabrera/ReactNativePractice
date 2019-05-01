@@ -110,6 +110,7 @@ class FindPlaceScreen extends Component {
                 </TouchableOpacity>
             </Animated.View>
         );
+        
         if (this.state.placesLoaded) {
             content = (
                 <Animated.View

@@ -26,6 +26,9 @@ class PickImage extends Component {
                 });
 
                 // forwards object to store
+                // .data is a property provided by res object which will store the image as base64 data
+                    // if you don't need this, next to title in .showImagePicker parameters, set noData: true
+                        // this will improve performance a bit because it skips image conversion to base64 data
                 this.props.onImagePicked({ uri: res.uri, base64: res.data });
             }
         });
