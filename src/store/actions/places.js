@@ -1,10 +1,21 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from './actionTypes';
 import { ADD_PLACE, DELETE_PLACE } from './actionTypes';
 
-export const addPlace = (placeName) => {
+// Before Module 9: Maps
+// export const addPlace = (placeName) => {
+//     return {
+//         type: ADD_PLACE,
+//         placeName: placeName
+//     };
+// };
+
+// For Module 9: Maps
+// Also have to edit /reducers/places.js
+export const addPlace = (placeName, location) => {
     return {
         type: ADD_PLACE,
-        placeName: placeName
+        placeName: placeName,
+        location: location
     };
 };
 

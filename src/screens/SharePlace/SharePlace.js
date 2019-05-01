@@ -45,6 +45,11 @@ class SharePlaceScreen extends Component {
                 validationRules: {
                     notEmpty: true
                 }
+            },
+            location: {
+                // it will then be an object with latitude and longitude
+                value: null,
+                valid: false
             }
         }
     };
@@ -94,15 +99,36 @@ class SharePlaceScreen extends Component {
         });
     };
 
+    // Added locationPIckedHandler in Module 9: Maps
+    locationPickedHandler = location => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    location: {
+                        value: location,
+                        valid: true
+                    }
+                }
+            };
+        });
+    };
+
     placeAddedHandler = () => {
         // if (this.state.placeName.trim() !== "") {
         //     this.props.onAddPlace(this.state.placeName);
         // }
 
         // For Module 8: Validation
-        if (this.state.controls.placeName.value.trim() !== "") {
-            this.props.onAddPlace(this.state.controls.placeName.value);
-        }
+        // if (this.state.controls.placeName.value.trim() !== "") {
+        //     this.props.onAddPlace(this.state.controls.placeName.value);
+        // }
+
+        // For Module 9: Maps
+        this.props.onAddPlace(
+            this.state.controls.placeName.value,
+            this.state.controls.location.value
+        );
     };
 
     render() {
@@ -120,7 +146,7 @@ class SharePlaceScreen extends Component {
                         <HeadingText>Share a Place with us!</HeadingText>
                     </MainText>
                     <PickImage />
-                    <PickLocation />
+                    <PickLocation onLocationPick={this.locationPickedHandler} />
                     {/* Moved to PickImage.js <View style={styles.placeholder}>
                         <Image source={imagePlaceholder} style={styles.previewImage} />
                     </View>
@@ -143,7 +169,11 @@ class SharePlaceScreen extends Component {
                         <Button
                             title="Share the Place!"
                             onPress={this.placeAddedHandler}
-                            disabled={!this.state.controls.placeName.valid}
+                            disabled={
+                                !this.state.controls.placeName.valid ||
+                                // prevents submission before you've picked a location
+                                !this.state.controls.location.valid
+                            }
                         />
                     </View>
                 </View>
@@ -174,8 +204,14 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch => {
+    // return {
+    //     onAddPlace: (placeName) => dispatch(addPlace(placeName))
+    // };
+
+    // For Module 9: Maps
+    // also need to edit /store/actions/places.js
     return {
-        onAddPlace: (placeName) => dispatch(addPlace(placeName))
+        onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location))
     };
 };
 

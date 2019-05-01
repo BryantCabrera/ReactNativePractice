@@ -18,7 +18,9 @@ const reducer = (state = initialState, action) => {
                     name: action.placeName,
                     image: {
                         uri: "https://i.imgur.com/KbicDVh.jpg"
-                    }
+                    },
+                    // Added in Module 9: Maps
+                    location: action.location
                 })
             };
         case DELETE_PLACE:
