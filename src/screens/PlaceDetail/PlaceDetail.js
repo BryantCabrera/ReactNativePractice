@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { connect } from "react-redux";
+import MapView from "react-native-maps";
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { deletePlace } from '../../store/actions/index';
@@ -87,11 +88,29 @@ class PlaceDetail extends Component {
                         : styles.landscapeContainer
                 ]}
             >
-                <View style={styles.subContainer}>
-                    <Image
-                        source={this.props.selectedPlace.image}
-                        style={styles.placeImage}
-                    />
+                <View style={styles.placeDetailContainer}>
+                    <View style={styles.subContainer}>
+                        <Image
+                            source={this.props.selectedPlace.image}
+                            style={styles.placeImage}
+                        />
+                    </View>
+                    <View style={styles.subContainer}>
+                        <MapView
+                            initialRegion={{
+                                ...this.props.selectedPlace.location,
+                                latitudeDelta: 0.0122,
+                                longitudeDelta:
+                                    Dimensions.get("window").width /
+                                    Dimensions.get("window").height *
+                                    0.0122
+                            }}
+                            style={styles.map}
+                        >
+                            {/* Doesn't need to be conditional because there will be no case where we'll try to render this without having the marker */}
+                            <MapView.Marker coordinate={this.props.selectedPlace.location} />
+                        </MapView>
+                    </View>
                 </View>
                 <View style={styles.subContainer}>
                     <View>
@@ -129,14 +148,25 @@ const styles = StyleSheet.create({
     landscapeContainer: {
         flexDirection: "row"
     },
+    // Added in Module 9: Maps
+    placeDetailContainer: {
+        flex: 2
+    },
     placeImage: {
         width: "100%",
-        height: 200
+        // height: 200
+        // want to make sure the image doesn't underlap the map
+        height: "100%"
     },
     placeName: {
         fontWeight: "bold",
         textAlign: "center",
         fontSize: 28
+    },
+    // Added in Module 9: Maps
+    map: {
+        // preconfigured styles that ensure the map will fill the surrounding container
+        ...StyleSheet.absoluteFillObject
     },
     deleteButton: {
         alignItems: "center"
