@@ -22,6 +22,16 @@ class PickLocation extends Component {
     // Uses user data to bind data to the map user clicks on
     pickLocationHandler = event => {
         const coords = event.nativeEvent.coordinate;
+
+        // Arguments are region, duration
+            // if you leave out duration it will automatically pick a nice one
+        this.map.animateToRegion({
+            ...this.state.focusedLocation,
+            // the following overwrites the latitude and longitude
+            latitude: coords.latitude,
+            longitude: coords.longitude
+        });
+
         this.setState(prevState => {
             return {
                 focusedLocation: {
@@ -38,6 +48,7 @@ class PickLocation extends Component {
         let marker = null;
 
         if (this.state.locationChosen) {
+            // can still bind it to focused location because it will just take in latitude and longitutde and ignore the other 2 items
             marker = <MapView.Marker coordinate={this.state.focusedLocation} />;
         }
 
@@ -50,9 +61,13 @@ class PickLocation extends Component {
                     provider={PROVIDER_GOOGLE}
                     // initial region won’t change again, so use region attribute
                     initialRegion={this.state.focusedLocation}
-                    region={this.state.focusedLocation}
+                    // can now omit this region property because we will animate to it
+                    // region={this.state.focusedLocation}
                     style={styles.map}
                     onPress={this.pickLocationHandler}
+                    // react generates default parameter ref (reference) then you can bind some property of our class to this reference
+                    // Generates a property to this class that creates a reference to this object
+                    ref={ref => this.map = ref}
                 >
                     {marker}
                 </MapView>
