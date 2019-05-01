@@ -56,3 +56,6 @@ buck-out/
 *.jsbundle
 
 ios/GoogleMapsCore.framework/GoogleMapsCore
+
+.env.development
+.env.production
