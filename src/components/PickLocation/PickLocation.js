@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Image, Button, StyleSheet, Text, Dimensions } from "react-native";
-import MapView from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 class PickLocation extends Component {
     state = {
@@ -19,6 +19,7 @@ class PickLocation extends Component {
         locationChosen: false
     };
 
+    // Uses user data to bind data to the map user clicks on
     pickLocationHandler = event => {
         const coords = event.nativeEvent.coordinate;
         this.setState(prevState => {
@@ -46,6 +47,8 @@ class PickLocation extends Component {
                     <Text>Map</Text>
                 </View> */}
                 <MapView
+                    provider={PROVIDER_GOOGLE}
+                    // initial region won’t change again, so use region attribute
                     initialRegion={this.state.focusedLocation}
                     region={this.state.focusedLocation}
                     style={styles.map}
