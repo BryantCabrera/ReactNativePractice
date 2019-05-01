@@ -1,17 +1,46 @@
 import React, { Component } from "react";
 import { View, Image, Button, StyleSheet } from "react-native";
+import ImagePicker from "react-native-image-picker";
 
-import imagePlaceholder from "../../assets/beautiful-place.jpg";
+// No longer needed after Module 9: Image Picker
+// import imagePlaceholder from "../../assets/beautiful-place.jpg";
 
 class PickImage extends Component {
+    state = {
+        pickedImaged: null
+    }
+
+    pickImageHandler = () => {
+        // arguments: title, response
+        // response can then be handled in arrow function body
+        ImagePicker.showImagePicker({ title: "Pick an Image" }, res => {
+            // all properties manged by ImagePicker library
+            if (res.didCancel) {
+                console.log("User cancelled!");
+            } else if (res.error) {
+                console.log("Error", res.error);
+            } else {
+                this.setState({
+                    // this is because image src in the render needs an object which has a uri property
+                    pickedImaged: { uri: res.uri }
+                });
+
+                // forwards object to store
+                this.props.onImagePicked({ uri: res.uri, base64: res.data });
+            }
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.placeholder}>
-                <Image source={imagePlaceholder} style={styles.previewImage} />
+                    {/* No longer needed after Module 9: Image Picker <Image source={imagePlaceholder} style={styles.previewImage} /> */}
+                    <Image source={this.state.pickedImaged} style={styles.previewImage} />
                 </View>
                 <View style={styles.button}>
-                <Button title="Pick Image" onPress={() => alert('Pick Image!')} />
+                    {/* No longer needed after Module 9: Image Picker <Button title="Pick Image" onPress={() => alert('Pick Image!')} /> */}
+                    <Button title="Pick Image" onPress={this.pickImageHandler} />
                 </View>
             </View>
         );

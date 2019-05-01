@@ -3,6 +3,7 @@ package com.reactnativepractice;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -13,6 +14,35 @@ import com.airbnb.android.react.maps.MapsPackage;
 
 import java.util.Arrays;
 import java.util.List;
+
+public class MainApplication extends NavigationApplication {
+ 
+  @Override
+  public boolean isDebug() {
+    // Make sure you are using BuildConfig from your own application
+    return BuildConfig.DEBUG;
+  }
+ 
+  protected List<ReactPackage> getPackages() {
+    // Add additional packages you require here
+    // No need to add RnnPackage and MainReactPackage
+    return Arrays.<ReactPackage>asList(
+      new VectorIconsPackage(),
+      new MapsPackage(),
+      new ImagePickerPackage()
+    );
+  }
+ 
+  @Override
+  public List<ReactPackage> createAdditionalReactPackages() {
+    return getPackages();
+  }
+ 
+  @Override
+  public String getJSMainModuleName() {
+    return "index";
+  }
+}
 
 //Replaced Code
 // public class MainApplication extends Application implements ReactApplication {
@@ -27,7 +57,8 @@ import java.util.List;
 //     protected List<ReactPackage> getPackages() {
 //       return Arrays.<ReactPackage>asList(
 //           new MainReactPackage(),
-            new MapsPackage(), 
+            // new ImagePickerPackage(),
+            // new MapsPackage(), 
 //           new VectorIconsPackage()
 //       );
 //     }
@@ -49,31 +80,3 @@ import java.util.List;
 //     SoLoader.init(this, /* native exopackage */ false);
 //   }
 // }
-
-public class MainApplication extends NavigationApplication {
- 
-  @Override
-  public boolean isDebug() {
-    // Make sure you are using BuildConfig from your own application
-    return BuildConfig.DEBUG;
-  }
- 
-  protected List<ReactPackage> getPackages() {
-    // Add additional packages you require here
-    // No need to add RnnPackage and MainReactPackage
-    return Arrays.<ReactPackage>asList(
-      new VectorIconsPackage(),
-      new MapsPackage()
-    );
-  }
- 
-  @Override
-  public List<ReactPackage> createAdditionalReactPackages() {
-    return getPackages();
-  }
- 
-  @Override
-  public String getJSMainModuleName() {
-    return "index";
-  }
-}

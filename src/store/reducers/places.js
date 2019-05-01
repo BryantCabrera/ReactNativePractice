@@ -17,7 +17,10 @@ const reducer = (state = initialState, action) => {
                     key: Math.random().toString(),
                     name: action.placeName,
                     image: {
-                        uri: "https://i.imgur.com/KbicDVh.jpg"
+                        // uri: "https://i.imgur.com/KbicDVh.jpg"
+
+                        // For Module 9: Image Picker
+                        uri: action.image.uri
                     },
                     // Added in Module 9: Maps
                     location: action.location

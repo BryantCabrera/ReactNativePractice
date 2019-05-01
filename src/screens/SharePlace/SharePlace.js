@@ -50,6 +50,10 @@ class SharePlaceScreen extends Component {
                 // it will then be an object with latitude and longitude
                 value: null,
                 valid: false
+            },
+            image: {
+                value: null,
+                valid: false
             }
         }
     };
@@ -114,6 +118,21 @@ class SharePlaceScreen extends Component {
         });
     };
 
+    // Added imagePickedHandler in Module 9: Image Picker
+    imagePickedHandler = image => {
+        this.setState(prevState => {
+            return {
+                controls: {
+                    ...prevState.controls,
+                    image: {
+                        value: image,
+                        valid: true
+                    }
+                }
+            };
+        });
+    }
+
     placeAddedHandler = () => {
         // if (this.state.placeName.trim() !== "") {
         //     this.props.onAddPlace(this.state.placeName);
@@ -127,7 +146,8 @@ class SharePlaceScreen extends Component {
         // For Module 9: Maps
         this.props.onAddPlace(
             this.state.controls.placeName.value,
-            this.state.controls.location.value
+            this.state.controls.location.value,
+            this.state.controls.image.value
         );
     };
 
@@ -145,7 +165,7 @@ class SharePlaceScreen extends Component {
                     <MainText>
                         <HeadingText>Share a Place with us!</HeadingText>
                     </MainText>
-                    <PickImage />
+                    <PickImage onImagePicked={this.imagePickedHandler} />
                     <PickLocation onLocationPick={this.locationPickedHandler} />
                     {/* Moved to PickImage.js <View style={styles.placeholder}>
                         <Image source={imagePlaceholder} style={styles.previewImage} />
@@ -172,7 +192,9 @@ class SharePlaceScreen extends Component {
                             disabled={
                                 !this.state.controls.placeName.valid ||
                                 // prevents submission before you've picked a location
-                                !this.state.controls.location.valid
+                                !this.state.controls.location.valid ||
+                                // prevents submission if the image is invalid
+                                !this.state.controls.image.valid
                             }
                         />
                     </View>
@@ -210,8 +232,14 @@ const mapDispatchToProps = dispatch => {
 
     // For Module 9: Maps
     // also need to edit /store/actions/places.js
+    // return {
+    //     onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location))
+    // };
+
+    // For Module 9: ImagePicker
+    // also need to edit /store/actions/places.js
     return {
-        onAddPlace: (placeName, location) => dispatch(addPlace(placeName, location))
+        onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image))
     };
 };
 
