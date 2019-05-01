@@ -1,4 +1,5 @@
-import { createStore, combineReducers, compose } from 'redux';
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
+import thunk from "redux-thunk";
 
 import placesReducer from './reducers/places';
     
@@ -18,7 +19,11 @@ const configureStore = () => {
 
     // With connection to redux developer tools
     // We can pass apply middleware to composeEnhancers() because redux dev tools are not a middleware
-    return createStore(rootReducer, composeEnhancers());
+    // return createStore(rootReducer, composeEnhancers());
+
+    // Added in Module 10: HTTP Requests
+    // Thunk middleware will now step in during the action creators if we follow a certain pattern
+    return createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
 }
 
 export default configureStore;
