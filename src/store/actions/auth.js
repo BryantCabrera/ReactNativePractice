@@ -118,10 +118,11 @@ export const tryAuth = (authData, authMode) => {
 //     };
 // };
 
-export const authSetToken = token => {
+export const authSetToken = (token, expiryDate) => {
     return {
         type: AUTH_SET_TOKEN,
-        token: token
+        token: token,
+        expiryDate: expiryDate
     };
 };
 
@@ -130,9 +131,15 @@ export const authGetToken = () => {
     return (dispatch, getState) => {
         // redux thunk lets you return a promise
         const promise = new Promise((resolve, reject) => {
+            // get token from that state
             const token = getState().auth.token;
+            // Added in Module 11: Refresh Token Without App Reloads
+            const expiryDate = getState().auth.expiryDate;
 
-            if (!token) {
+            // only if it is null, do we enter this block
+            // Problem: before this, we never check the token
+            // SOLUTION: store expiration date in storage
+            if (!token || new Date(expiryDate) <= new Date()) {
                 // reject();
 
                 // Added in Module 11: when connecting to AsyncStorage
@@ -169,6 +176,8 @@ export const authGetToken = () => {
                 })
                 .catch(err => reject());
             } else {
+                // we end up here, but that token might have been expired
+                // SOLUTION: store expiration date in storage
                 resolve(token);
             }
         });
@@ -227,7 +236,10 @@ export const authGetToken = () => {
 // Added in Module 11: Token AsyncStorage
 export const authStoreToken = (token, expiresIn, refreshToken) => {
     return dispatch => {
-        dispatch(authSetToken(token));
+        const now = new Date();
+        const expiryDate = now.getTime() + expiresIn * 1000;
+
+        dispatch(authSetToken(token, expiryDate));
 
         const now = new Date();
         // multiply by 1000 because it is in milliseconds
