@@ -61,7 +61,13 @@ export const tryAuth = (authData, authMode) => {
                 if (!parsedRes.idToken) {
                     alert("Authentication failed, please try again!");
                 } else {
-                    dispatch(authSetToken(parsedRes.idToken));
+                    dispatch(
+                        authSetToken(
+                        parsedRes.idToken,
+                        parsedRes.expiresIn,
+                        parsedRes.refreshToken
+                        )
+                    );
 
                     startMainTabs();
                 }
@@ -129,6 +135,7 @@ export const authGetToken = () => {
                 // Added in Module 11: when connecting to AsyncStorage
                 // gets token from storage in case it is missing from redux
                 let fetchedToken;
+                
                 AsyncStorage.getItem("rnp:auth:token")
                 .catch(err => reject())
                 .then(tokenFromStorage => {
@@ -143,11 +150,16 @@ export const authGetToken = () => {
                 })
                 .then(expiryDate => {
                     const parsedExpiryDate = new Date(parseInt(expiryDate));
+
                     const now = new Date();
+
                     if (parsedExpiryDate > now) {
+                        // token is still valid because it will expire in the future
                         dispatch(authSetToken(fetchedToken));
+
                         resolve(fetchedToken);
                     } else {
+                        // fails if the expiry date has passed OR if we can't get token and the date is null
                         reject();
                     }
 
@@ -173,9 +185,12 @@ export const authStoreToken = (token, expiresIn) => {
         dispatch(authSetToken(token));
 
         const now = new Date();
+        // multiply by 1000 because it is in milliseconds
         const expiryDate = now.getTime() + expiresIn * 1000;
+        // check it with console.log(now, new Date(expiryDate));
 
         // setItem can be anything you name it, any string you want, just a clear identifier
+            // AsyncStorage only accepts strings, so we need .toString()
         AsyncStorage.setItem("rnp:auth:token", token);
         AsyncStorage.setItem("rnp:auth:expiryDate", expiryDate.toString());
     };
