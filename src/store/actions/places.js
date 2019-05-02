@@ -1,5 +1,5 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from './actionTypes';
-import { ADD_PLACE, DELETE_PLACE } from './actionTypes';
+import { ADD_PLACE, DELETE_PLACE, SET_PLACES, REMOVE_PLACE } from './actionTypes';
 import { uiStartLoading, uiStopLoading, authGetToken } from './index';
 
 // Before Module 9: Maps
@@ -129,13 +129,17 @@ export const addPlace = (placeName, location, image) => {
             alert("No valid token found!");
         })
         .then(token => {
+            authToken = token;
             return fetch(
                 "https://us-central1-reactnativepract-1556642515054.cloudfunctions.net/storeImage",
                 {
                     method: "POST",
                     body: JSON.stringify({
                         image: image.base64
-                    })
+                    }),
+                    headers: {
+                        Authorization: "Bearer " + authToken
+                    }
                 }
             );
         })
@@ -152,7 +156,8 @@ export const addPlace = (placeName, location, image) => {
                 image: parsedRes.imageUrl
             };
             return fetch(
-                "https://reactnativepract-1556642515054.firebaseio.com/places.json",
+                "https://reactnativepract-1556642515054.firebaseio.com/places.json?auth=" +
+                authToken,
                 {
                     method: "POST",
                     body: JSON.stringify(placeData)

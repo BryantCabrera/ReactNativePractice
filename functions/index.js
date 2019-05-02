@@ -30,7 +30,7 @@ const gcconfig = {
 const gcs = require("@google-cloud/storage")(gcconfig);
 
 admin.initializeApp({
-    credential: admin.credential.cert(require("./awesome-places.json"))
+    credential: admin.credential.cert(require("./reactnativepractice.json"))
 });
 
 // // Create and Deploy Your First Cloud Functions

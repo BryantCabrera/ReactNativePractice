@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { Modal, View, Image, Text, Button, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
+import {
+    // Modal,
+    View,
+    Image,
+    Text,
+    Button,
+    StyleSheet,
+    TouchableOpacity,
+    Platform,
+    Dimensions
+} from 'react-native';
 import { connect } from "react-redux";
 import MapView from "react-native-maps";
 
@@ -140,7 +150,8 @@ const styles = StyleSheet.create({
     //     margin: 22
     // },
     container: {
-        margin: 22
+        margin: 22,
+        flex: 1
     },
     portraitContainer: {
         flexDirection: "column"
