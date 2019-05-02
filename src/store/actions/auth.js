@@ -7,6 +7,8 @@ import { TRY_AUTH, AUTH_SET_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from "./index";
 import startMainTabs from "../../screens/MainTabs/startMainTabs";
 
+const API_KEY = "AIzaSyDzuG1WWDn3Sbfva0eqVmBXcu49HJojOCA";
+
 // authMode parameter added in Module 11: Auth
 export const tryAuth = (authData, authMode) => {
     // Replaced in Module 11: Auth
@@ -24,13 +26,13 @@ export const tryAuth = (authData, authMode) => {
     return dispatch => {
         dispatch(uiStartLoading());
 
-        const apiKey = "AIzaSyDzuG1WWDn3Sbfva0eqVmBXcu49HJojOCA";
+        // const apiKey = "AIzaSyDzuG1WWDn3Sbfva0eqVmBXcu49HJojOCA";
 
-        let url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + apiKey;
+        let url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" + API_KEY;
 
         // the only different between signup and login is this url
         if (authMode === "signup") {
-            url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + apiKey
+            url = "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" + API_KEY
         }
 
         fetch(
@@ -170,17 +172,59 @@ export const authGetToken = () => {
             }
         });
 
-        promise.catch(err => {
-            dispatch(authClearStorage());
-        });
+        // promise.catch(err => {
+        //     dispatch(authClearStorage());
+        // });
 
         // make sure to return promise
-        return promise;
+        return promise
+        .catch(err => {
+            return AsyncStorage.getItem("ap:auth:refreshToken")
+                .then(refreshToken => {
+                    return fetch(
+                        "https://securetoken.googleapis.com/v1/token?key=" + API_KEY,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: "grant_type=refresh_token&refresh_token=" + refreshToken
+                        }
+                    );
+                })
+                .then(res => res.json())
+                .then(parsedRes => {
+                    if (parsedRes.id_token) {
+                        console.log("Refresh token worked!");
+
+                        dispatch(
+                            authStoreToken(
+                                parsedRes.id_token,
+                                parsedRes.expires_in,
+                                parsedRes.refresh_token
+                            )
+                        );
+
+                        // we don't want to just store it for the future, we want to use it immediately
+                        return parsedRes.id_token;
+                    } else {
+                        dispatch(authClearStorage());
+                    }
+                });
+        })
+        .then(token => {
+            if (!token) {
+                // ensures we make it into the .catch() block in authAutoSignIn()
+                throw new Error();
+            } else {
+                return token;
+            }
+        });   
     };
 };
 
 // Added in Module 11: Token AsyncStorage
-export const authStoreToken = (token, expiresIn) => {
+export const authStoreToken = (token, expiresIn, refreshToken) => {
     return dispatch => {
         dispatch(authSetToken(token));
 
@@ -193,6 +237,7 @@ export const authStoreToken = (token, expiresIn) => {
             // AsyncStorage only accepts strings, so we need .toString()
         AsyncStorage.setItem("rnp:auth:token", token);
         AsyncStorage.setItem("rnp:auth:expiryDate", expiryDate.toString());
+        AsyncStorage.setItem("rnp:auth:refreshToken", refreshToken);
     };
 };
 
