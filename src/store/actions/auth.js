@@ -3,9 +3,10 @@
         // For Android, it will pick SQLite
 import { AsyncStorage } from "react-native";
 
-import { TRY_AUTH, AUTH_SET_TOKEN } from './actionTypes';
+import { TRY_AUTH, AUTH_SET_TOKEN, AUTH_REMOVE_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from "./index";
 import startMainTabs from "../../screens/MainTabs/startMainTabs";
+import App from "../../../App";
 
 const API_KEY = "AIzaSyDzuG1WWDn3Sbfva0eqVmBXcu49HJojOCA";
 
@@ -258,5 +259,28 @@ export const authClearStorage = () => {
     return dispatch => {
         AsyncStorage.removeItem("rnp:auth:token");
         AsyncStorage.removeItem("rnp:auth:expiryDate");
+
+        // Added in Module 11: Auth Logout
+        //we return it so that we can subscribe to it in authLogout()
+        return AsyncStorage.removeItem("ap:auth:refreshToken");
+    };
+};
+
+// Added in Module 11: Auth Logout
+// action creator that lets us run side effects
+export const authLogout = () => {
+    return dispatch => {
+        dispatch(authClearStorage()).then(() => {
+            // only called if we did successfuly clear the token from storage; prevents infinite loop
+            App();
+        });
+        dispatch(authRemoveToken());
+    };
+};
+
+// clears internal state
+export const authRemoveToken = () => {
+    return {
+        type: AUTH_REMOVE_TOKEN
     };
 };

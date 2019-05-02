@@ -5,5 +5,5 @@
 
 export { addPlace, deletePlace, getPlaces } from './places';
 // For Module 8: Validation
-export { tryAuth, authGetToken, authAutoSignIn } from './auth';
+export { tryAuth, authGetToken, authAutoSignIn, authLogout } from './auth';
 export { uiStartLoading, uiStopLoading } from "./ui";

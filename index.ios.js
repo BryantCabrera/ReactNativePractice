@@ -33,3 +33,6 @@ import App from './App';
 
 //no longer need to use AppRegistry
 // AppRegistry.registerComponent(appName, () => App);
+
+// Added in Module 11: Auth Logout
+App();

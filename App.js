@@ -199,11 +199,22 @@ Navigation.registerComponent(
 );
 Navigation.registerComponent(
     "awesome-places.SideDrawer",
-    () => SideDrawer
+    () => SideDrawer,
+    store,
+    Provider
 );
 
-// Start a App (for React Native Navigation, not the actual "App")
-Navigation.startSingleScreenApp({
+// Start an App (for React Native Navigation, not the actual "App")
+// Navigation.startSingleScreenApp({
+//     screen: {
+//         screen: "awesome-places.AuthScreen",
+//         title: "Login"
+//     }
+// });
+
+// Modified in Module 11: Auth Logout
+// lets us import it in other files
+export default () => Navigation.startSingleScreenApp({
     screen: {
         screen: "awesome-places.AuthScreen",
         title: "Login"
