@@ -104,16 +104,21 @@ export const addPlace = (placeName, location, image) => {
                 body: JSON.stringify(placeData)
             })
         })
-        .catch(err => {
-            console.log(err);
-            alert("Something went wrong, please try again!");
+        // .catch(err => {
+        //     console.log(err);
+        //     alert("Something went wrong, please try again!");
 
-            // removes spinner
-            dispatch(uiStopLoading());
-        })
+        //     // removes spinner
+        //     dispatch(uiStopLoading());
+        // })
         .then(res => res.json())
         .then(parsedRes => {
             console.log(parsedRes);
+            dispatch(uiStopLoading());
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong, please try again!");
             dispatch(uiStopLoading());
         });
     };
@@ -123,10 +128,10 @@ export const addPlace = (placeName, location, image) => {
 export const getPlaces = () => {
     return dispatch => {
         fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json")
-            .catch(err => {
-                alert("Something went wrong, sorry :/");
-                console.log(err);
-            })
+            // .catch(err => {
+            //     alert("Something went wrong, sorry :/");
+            //     console.log(err);
+            // })
             .then(res => res.json())
             .then(parsedRes => {
                 const places = [];
@@ -143,6 +148,10 @@ export const getPlaces = () => {
 
                 // places will be a JavaScript object where the keys will be the unique IDs from firebase and the values will be the nested objects
                 dispatch(setPlaces(places));
+            })
+            .catch(err => {
+                alert("Something went wrong, sorry :/");
+                console.log(err);
             });
     };
 };
@@ -177,13 +186,17 @@ export const deletePlace = (key) => {
         fetch("https://reactnativepract-1556642515054.firebaseio.com/places/" + key + ".json", {
             method: "DELETE"
         })
-        .catch(err => {
-            alert("Something went wrong, sorry :/");
-            console.log(err);
-        })
+        // .catch(err => {
+        //     alert("Something went wrong, sorry :/");
+        //     console.log(err);
+        // })
         .then(res => res.json())
         .then(parsedRes => {
             console.log("Done!");
+        })
+        .catch(err => {
+            alert("Something went wrong, sorry :/");
+            console.log(err);
         });
     };
 };

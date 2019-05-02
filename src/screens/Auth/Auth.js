@@ -9,11 +9,13 @@ import {
     Dimensions,
     KeyboardAvoidingView,
     Keyboard,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    ActivityIndicator
 } from 'react-native';
 import { connect } from "react-redux";
 
-import startMainTabs from '../MainTabs/startMainTabs';
+// Removed in Module 11: Auth
+// import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from "../../components/UI/DefaultInput/DefaultInput";
 import HeadingText from "../../components/UI/HeadingText/HeadingText";
 import MainText from "../../components/UI/MainText/MainText";
@@ -96,18 +98,24 @@ class AuthScreen extends Component {
         });
     }
 
-
-    loginHandler = () => {
+    // Repnamed in Module 11: Auth
+    // loginHandler = () => {
+    authHandler = () => {
         // don't need confirmPassword here, that was just for frontend
         const authData = {
             email: this.state.controls.email.value,
             password: this.state.controls.password.value
         };
 
-        this.props.onLogin(authData);
+        // Replaced in Module 11: Auth
+        // this.props.onLogin(authData);
+        this.props.onTryAuth(authData, this.state.authMode);
 
-        startMainTabs();
+        // Removed in Module 11: Auth
+        // startMainTabs();
     }
+
+
 
     // Key is the property key in state
     // don't use this.state syntax because we only want to update the key of the particular property, so use prevState
@@ -170,6 +178,23 @@ class AuthScreen extends Component {
     render() {
         let headingText = null;
         let confirmPasswordControl = null;
+        // only want to render this if we are nto waiting for our request to finish
+        let submitButton = (
+            <ButtonWithBackground
+                color="#29aaf4"
+                // Replaced in Module 11: Auth
+                // onPress={this.loginHandler}
+                onPress={this.authHandler}
+                disabled={
+                    (!this.state.controls.confirmPassword.valid &&
+                        this.state.authMode === "signup") ||
+                    !this.state.controls.email.valid ||
+                    !this.state.controls.password.valid
+                }
+            >
+                Submit
+            </ButtonWithBackground>
+        );
 
         if (this.state.viewMode === "portrait") {
             headingText = (
@@ -199,6 +224,10 @@ class AuthScreen extends Component {
                     />
                 </View>
             );
+        }
+
+        if (this.props.isLoading) {
+            submitButton = <ActivityIndicator />;
         }
 
         return (
@@ -334,7 +363,7 @@ class AuthScreen extends Component {
                             </View>
                         </View>
                     </TouchableWithoutFeedback>
-                    <ButtonWithBackground
+                    {/* Replaced in Module 11: Auth <ButtonWithBackground
                         color="#29aaf4"
                         onPress={this.loginHandler}
                         disabled={
@@ -344,7 +373,9 @@ class AuthScreen extends Component {
                         }
                     >
                         Submit
-                    </ButtonWithBackground>
+                    </ButtonWithBackground> */}
+
+                    {submitButton}
                 </KeyboardAvoidingView>
             </ImageBackground>
         );
@@ -384,10 +415,21 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapDispatchToProps = dispatch => {
+// Added mapStateToProps in Module 11: Auth to have access to store to see if we are loading or not
+const mapStateToProps = state => {
     return {
-        onLogin: authData => dispatch(tryAuth(authData))
+        isLoading: state.ui.isLoading
     };
 };
 
-export default connect(null, mapDispatchToProps)(AuthScreen);
+const mapDispatchToProps = dispatch => {
+    return {
+        // Replaced in Module 11: Auth
+        // onLogin: authData => dispatch(tryAuth(authData))
+        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
+    };
+};
+
+// Replaced in Module 11: Auth
+// export default connect(null, mapDispatchToProps)(AuthScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(AuthScreen);
