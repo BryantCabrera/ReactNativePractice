@@ -88,6 +88,7 @@ export const addPlace = (placeName, location, image) => {
         })
         .catch(err => {
             console.log(err);
+            // not the best error handler, but better than staying silent
             alert("Something went wrong, please try again!");
             dispatch(uiStopLoading());
         })
@@ -118,6 +119,42 @@ export const addPlace = (placeName, location, image) => {
     };
 };
 
+// Added getPlaces() and setPlaces() in Module 10: HTTP Requests
+export const getPlaces = () => {
+    return dispatch => {
+        fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json")
+            .catch(err => {
+                alert("Something went wrong, sorry :/");
+                console.log(err);
+            })
+            .then(res => res.json())
+            .then(parsedRes => {
+                const places = [];
+                for (let key in parsedRes) {
+                    places.push({
+                        ...parsedRes[key],
+                        image: {
+                            // this is parsedResponse['unique-id-from-firebase'].image
+                            uri: parsedRes[key].image
+                        },
+                        key: key
+                    });
+                }
+
+                // places will be a JavaScript object where the keys will be the unique IDs from firebase and the values will be the nested objects
+                dispatch(setPlaces(places));
+            });
+    };
+};
+
+// the action we use when we get a response
+export const setPlaces = places => {
+    return {
+        type: SET_PLACES,
+        places: places
+    };
+};
+
 // Before using connect method with Navigation on PlaceDetail.js
 // export const deletePlace = () => {
 //     return {
@@ -126,10 +163,14 @@ export const addPlace = (placeName, location, image) => {
 // };
 
 export const deletePlace = (key) => {
-    return {
-        type: DELETE_PLACE,
-        placeKey: key
-    };
+    // return {
+    //     type: DELETE_PLACE,
+    //     placeKey: key
+    // };
+
+    // Modified in Module 10: Assignment 6
+    // return dispatch => {} allows you to run asynchronous code
+    
 };
 
 // Don't need the following anymore after connecting to react-native-navigation
@@ -145,3 +186,11 @@ export const deletePlace = (key) => {
 //         type: DESELECT_PLACE
 //     };
 // };
+
+// Added in Module 10: Assignment 6
+export const removePlace = key => {
+    return {
+        type: REMOVE_PLACE,
+        key: key
+    };
+};

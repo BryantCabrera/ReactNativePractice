@@ -1,5 +1,8 @@
-export const ADD_PLACE = 'ADD_PLACE';
-export const DELETE_PLACE = 'DELETE_PLACE';
+// Removed ADD_PLACE and DELETE_PLACE in Module 10 HTTP Requests because they were only used for synchronous code
+// export const ADD_PLACE = 'ADD_PLACE';
+// export const DELETE_PLACE = 'DELETE_PLACE';
+export const SET_PLACES = "SET_PLACES";
+
 
 // Don't need the following anymore after connecting to react-native-navigation
 // export const SELECT_PLACE = 'SELECT_PLACE';

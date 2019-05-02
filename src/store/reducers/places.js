@@ -1,5 +1,5 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from '../actions/actionTypes';
-import { ADD_PLACE, DELETE_PLACE } from '../actions/actionTypes';
+import { ADD_PLACE, DELETE_PLACE, SET_PLACES } from '../actions/actionTypes';
 
 const initialState = {
     places: []
@@ -10,21 +10,27 @@ const initialState = {
 //ES6 lets you set parameter to a default value
 const reducer = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_PLACE:
+        // removed ADD_PLACE in Module 10: HTTP Requests because we only used it for synchronous code
+        // case ADD_PLACE:
+        //     return {
+        //         ...state,
+        //         places: state.places.concat({
+        //             key: Math.random().toString(),
+        //             name: action.placeName,
+        //             image: {
+        //                 // uri: "https://i.imgur.com/KbicDVh.jpg"
+
+        //                 // For Module 9: Image Picker
+        //                 uri: action.image.uri
+        //             },
+        //             // Added in Module 9: Maps
+        //             location: action.location
+        //         })
+        //     };
+        case SET_PLACES:
             return {
                 ...state,
-                places: state.places.concat({
-                    key: Math.random().toString(),
-                    name: action.placeName,
-                    image: {
-                        // uri: "https://i.imgur.com/KbicDVh.jpg"
-
-                        // For Module 9: Image Picker
-                        uri: action.image.uri
-                    },
-                    // Added in Module 9: Maps
-                    location: action.location
-                })
+                places: action.places
             };
         case DELETE_PLACE:
             return {

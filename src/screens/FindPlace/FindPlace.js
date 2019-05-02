@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native
 import { connect } from "react-redux";
 
 import PlaceList from "../../components/PlaceList/PlaceList";
+import { getPlaces } from "../../store/actions/index";
 
 class FindPlaceScreen extends Component {
     // static keyword can be accessed without having to instantiate the class
@@ -27,6 +28,11 @@ class FindPlaceScreen extends Component {
 
         // Here, we specify a navigation method whenever a navigation event occurs
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+    }
+
+    // Added componentDidMount in Module 10: HTTP Requests
+    componentDidMount() {
+        this.props.onLoadPlaces();
     }
 
     // arrow function syntax lets you avoid binding "this"
@@ -168,5 +174,15 @@ const mapStateToProps = state => {
     };
 };
 
+// Added mapDispatchToProps in Module 10: HTTP Requests
+const mapDispatchToProps = dispatch => {
+    return {
+        onLoadPlaces: () => dispatch(getPlaces())
+    };
+};
+
 // export default FindPlaceScreen;
-export default connect(mapStateToProps)(FindPlaceScreen);
+// export default connect(mapStateToProps)(FindPlaceScreen);
+
+// Modified export in Module 10: HTTP Requests
+export default connect(mapStateToProps, mapDispatchToProps)(FindPlaceScreen);
