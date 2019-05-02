@@ -3,12 +3,24 @@ const functions = require('firebase-functions');
 const cors = require("cors")({ origin: true });
 // file service is a default node.js package
 const fs = require("fs");
+const UUID = require("uuid-v4");
 
 const gcconfig = {
     // the projectId associated with this project
-    projectId: "YOUR_PROJECT_ID",
+    // in firebase console, go to settings page > general > Project ID
+    projectId: "reactnativepract-1556642515054",
+
     // file you can download from your firebase project that holds credentials
-    keyFilename: "awesome-places.json"
+    // to get this file, go to firebase console for your project
+        // 1) click gear icon
+        // 2) click project settings
+        // 3) choose service accounts
+        // 4) leave Node.js clicked
+        // 5) click Generate New Private Key
+        // 6) store the file that downloads in your functions folder in your project folder
+            // can rename it, just make sure it ends in .json
+    // make sure the value for this property is what you named that key file
+    keyFilename: "reactnativepractice.json"
 };
 
 // to have access rights, we need to pass some configuration
@@ -34,17 +46,25 @@ exports.storeImage = functions.https.onRequest((request, response) => {
             return response.status(500).json({ error: err });
         });
 
-        const bucket = gcs.bucket("YOUR_PROJECT_ID.appspot.com");
+        // to get bucket name
+            // in firebase console > storage > get started
+            // click got it
+            // copy and paste the url at the top(without the gs://) into .bucket in your cloud function in VSCode
+
+        const bucket = gcs.bucket("reactnativepract-1556642515054.appspot.com");
         const uuid = UUID();
 
         bucket.upload(
             "/tmp/uploaded-image.jpg",
             {
                 uploadType: "media",
+                // where it should be stored in your bucket
                 destination: "/places/" + uuid + ".jpg",
                 metadata: {
+                    // need this other metadata property
                     metadata: {
                         contentType: "image/jpeg",
+                        // this will be needed to get a convenient firebase download link in the end
                         firebaseStorageDownloadTokens: uuid
                     }
                 }
@@ -53,6 +73,7 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                 if (!err) {
                     response.status(201).json({
                         imageUrl:
+                            // keeps pattern that firebase would use to store images in storage based on its own SDK
                             "https://firebasestorage.googleapis.com/v0/b/" +
                             bucket.name +
                             "/o/" +
@@ -67,6 +88,4 @@ exports.storeImage = functions.https.onRequest((request, response) => {
             }
         );
     });
-
-    response.send("Hello from Firebase!");
 });

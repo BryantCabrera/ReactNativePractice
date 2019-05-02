@@ -1,0 +1,37 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+source 'https://github.com/CocoaPods/Specs.git'
+target 'ReactNativePractice' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for ReactNativePractice
+
+#   target 'ReactNativePractice-tvOSTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
+
+  pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
+
+  target 'ReactNativePracticeTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  pod 'GoogleMaps'
+  pod 'GooglePlaces'
+end
+
+target 'ReactNativePractice-tvOS' do
+  # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
+  # use_frameworks!
+
+  # Pods for ReactNativePractice-tvOS
+
+  target 'ReactNativePractice-tvOSTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end

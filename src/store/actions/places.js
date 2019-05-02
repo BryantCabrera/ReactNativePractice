@@ -30,20 +30,35 @@ export const addPlace = (placeName, location, image) => {
             location: location
         };
 
-        // can now nest structures by adding onto the end of the URL
-        // for firebase, you have to add .json to the end of the URL
-        fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json", {
+        // // can now nest structures by adding onto the end of the URL
+        // // for firebase, you have to add .json to the end of the URL
+        // fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json", {
+        //     method: "POST",
+        //     // A POST request only makes sense if we attach a body
+        //     // body has to be in JSON format
+        //     // JSON.stringify turns it into a string/JSON format
+        //     body: JSON.stringify(placeData)
+        // })
+        // // can chain to the fetch request because a fetch request returns a promise
+        // // catch() will only catch failed network requests, it won't catch 4xx and 5xx error codes
+        // .catch(err => console.log(err))
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     console.log(parsedRes);
+        // });
+
+
+        // After deploying our cloud function
+        fetch("https://us-central1-reactnativepract-1556642515054.cloudfunctions.net/storeImage", {
             method: "POST",
-            // A POST request only makes sense if we attach a body
-            // body has to be in JSON format
-            // JSON.stringify turns it into a string/JSON format
-            body: JSON.stringify(placeData)
+            body: JSON.stringify({
+                image: image.base64
+            })
         })
-        // can chain to the fetch request because a fetch request returns a promise
-        // catch() will only catch failed network requests, it won't catch 4xx and 5xx error codes
         .catch(err => console.log(err))
         .then(res => res.json())
         .then(parsedRes => {
+            // this will take a little long because the image isn't small and the network speed of the simulator isn't too fast
             console.log(parsedRes);
         });
     };
