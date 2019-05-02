@@ -1,3 +1,8 @@
+// AsyncStorage is a react native component that helps you store key value pairs
+    // Will automatically pick the right storage depending on what system it’s running on
+        // For Android, it will pick SQLite
+import { AsyncStorage } from "react-native";
+
 import { TRY_AUTH, AUTH_SET_TOKEN } from './actionTypes';
 import { uiStartLoading, uiStopLoading } from "./index";
 import startMainTabs from "../../screens/MainTabs/startMainTabs";
@@ -119,13 +124,70 @@ export const authGetToken = () => {
             const token = getState().auth.token;
 
             if (!token) {
-                reject();
+                // reject();
+
+                // Added in Module 11: when connecting to AsyncStorage
+                // gets token from storage in case it is missing from redux
+                let fetchedToken;
+                AsyncStorage.getItem("rnp:auth:token")
+                .catch(err => reject())
+                .then(tokenFromStorage => {
+                    fetchedToken = tokenFromStorage;
+
+                    if (!tokenFromStorage) {
+                        reject();
+                        return;
+                    }
+
+                    return AsyncStorage.getItem("rnp:auth:expiryDate");
+                })
+                .then(expiryDate => {
+                    const parsedExpiryDate = new Date(parseInt(expiryDate));
+                    const now = new Date();
+                    if (parsedExpiryDate > now) {
+                        dispatch(authSetToken(fetchedToken));
+                        resolve(fetchedToken);
+                    } else {
+                        reject();
+                    }
+
+                })
+                .catch(err => reject());
             } else {
                 resolve(token);
             }
         });
 
+        promise.catch(err => {
+            dispatch(authClearStorage());
+        });
+
         // make sure to return promise
         return promise;
+    };
+};
+
+// Added in Module 11: Token AsyncStorage
+export const authStoreToken = (token, expiresIn) => {
+    return dispatch => {
+        dispatch(authSetToken(token));
+
+        const now = new Date();
+        const expiryDate = now.getTime() + expiresIn * 1000;
+
+        // setItem can be anything you name it, any string you want, just a clear identifier
+        AsyncStorage.setItem("rnp:auth:token", token);
+        AsyncStorage.setItem("rnp:auth:expiryDate", expiryDate.toString());
+    };
+};
+
+export const authAutoSignIn = () => {
+    return dispatch => {
+        // make sure authGetToken is invoked ()
+        dispatch(authGetToken())
+        .then(token => {
+            startMainTabs();
+        })
+        .catch(err => console.log("Failed to fetch token!"));
     };
 };

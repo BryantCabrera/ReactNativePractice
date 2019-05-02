@@ -22,7 +22,7 @@ import MainText from "../../components/UI/MainText/MainText";
 import ButtonWithBackground from "../../components/UI/ButtonWithBackground/ButtonWithBackground";
 import backgroundImage from "../../assets/background.jpg";
 import validate from "../../utility/validation";
-import { tryAuth } from "../../store/actions/index";
+import { tryAuth, authAutoSignIn } from "../../store/actions/index";
 
 class AuthScreen extends Component {
     // Setting the state won’t dynamically update the state, but the event listener in the constructor will
@@ -78,6 +78,13 @@ class AuthScreen extends Component {
     componentWillUnmount() {
         // Modularized the function to remove so that we could call it in this life cycle hook
         Dimensions.removeEventListener("change", this.updateStyles);
+    }
+
+    // Added in Module 11: Auth Auto signin
+    // it won't be executed if you just close the app and go into the app without killing it
+    // it will be executed if the user did kill the app and relaunched it
+    componentDidMount() {
+        this.props.onAutoSignIn();
     }
 
     // Added in Module 8: Validation
@@ -426,7 +433,9 @@ const mapDispatchToProps = dispatch => {
     return {
         // Replaced in Module 11: Auth
         // onLogin: authData => dispatch(tryAuth(authData))
-        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
+        onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode)),
+        // now you can access this in this.props in this component
+        onAutoSignIn: () => dispatch(authAutoSignIn())
     };
 };
 
