@@ -170,7 +170,22 @@ export const deletePlace = (key) => {
 
     // Modified in Module 10: Assignment 6
     // return dispatch => {} allows you to run asynchronous code
-    
+    return dispatch => {
+        dispatch(removePlace(key));
+        // if removing it on the server fails, the front-end will be out of sync, could go into catch black and readd the place
+            // creates a copy of the place
+        fetch("https://reactnativepract-1556642515054.firebaseio.com/places/" + key + ".json", {
+            method: "DELETE"
+        })
+        .catch(err => {
+            alert("Something went wrong, sorry :/");
+            console.log(err);
+        })
+        .then(res => res.json())
+        .then(parsedRes => {
+            console.log("Done!");
+        });
+    };
 };
 
 // Don't need the following anymore after connecting to react-native-navigation
@@ -188,6 +203,7 @@ export const deletePlace = (key) => {
 // };
 
 // Added in Module 10: Assignment 6
+// removes it immediately from the store and front-end so we don't have to wait for the async code in deletePlace to finish
 export const removePlace = key => {
     return {
         type: REMOVE_PLACE,

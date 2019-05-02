@@ -1,5 +1,5 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from '../actions/actionTypes';
-import { ADD_PLACE, DELETE_PLACE, SET_PLACES } from '../actions/actionTypes';
+import { ADD_PLACE, DELETE_PLACE, SET_PLACES, REMOVE_PLACE } from '../actions/actionTypes';
 
 const initialState = {
     places: []
@@ -32,15 +32,23 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 places: action.places
             };
-        case DELETE_PLACE:
+        // // Replaced with REMOVE_PLACE in Module 10: Assignment 6
+        // case DELETE_PLACE:
+        //     return {
+        //         ...state,
+        //         places: state.places.filter(place => {
+        //             // Before using connect method with Navigation on PlaceDetail.js
+        //             // return place.key !== state.selectedPlace.key;
+        //             return place.key !== action.placeKey;
+        //         })
+        //         // selectedPlace: null
+        //     };
+        case REMOVE_PLACE:
             return {
                 ...state,
                 places: state.places.filter(place => {
-                    // Before using connect method with Navigation on PlaceDetail.js
-                    // return place.key !== state.selectedPlace.key;
-                    return place.key !== action.placeKey;
+                    return place.key !== action.key;
                 })
-                // selectedPlace: null
             };
         // Don't need the following anymore after connecting to react-native-navigation
         // case SELECT_PLACE:
