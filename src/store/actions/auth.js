@@ -110,3 +110,22 @@ export const authSetToken = token => {
         token: token
     };
 };
+
+// can use authGetToken as a helper function anywhere in our app
+export const authGetToken = () => {
+    return (dispatch, getState) => {
+        // redux thunk lets you return a promise
+        const promise = new Promise((resolve, reject) => {
+            const token = getState().auth.token;
+
+            if (!token) {
+                reject();
+            } else {
+                resolve(token);
+            }
+        });
+
+        // make sure to return promise
+        return promise;
+    };
+};

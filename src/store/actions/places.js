@@ -1,6 +1,6 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from './actionTypes';
 import { ADD_PLACE, DELETE_PLACE } from './actionTypes';
-import { uiStartLoading, uiStopLoading } from './index';
+import { uiStartLoading, uiStopLoading, authGetToken } from './index';
 
 // Before Module 9: Maps
 // export const addPlace = (placeName) => {
@@ -77,18 +77,70 @@ export const addPlace = (placeName, location, image) => {
         //     console.log(parsedRes);
         // });
 
-        // After connecting to redux
-        // shows spinner
+        // // After connecting to redux
+        // // shows spinner
+        // dispatch(uiStartLoading());
+        // fetch("https://us-central1-reactnativepract-1556642515054.cloudfunctions.net/storeImage", {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         image: image.base64
+        //     })
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        //     // not the best error handler, but better than staying silent
+        //     alert("Something went wrong, please try again!");
+        //     dispatch(uiStopLoading());
+        // })
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     const placeData = {
+        //         name: placeName,
+        //         location: location,
+        //         image: parsedRes.imageUrl
+        //     };
+        //     return fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json", {
+        //         method: "POST",
+        //         body: JSON.stringify(placeData)
+        //     })
+        // })
+        // // .catch(err => {
+        // //     console.log(err);
+        // //     alert("Something went wrong, please try again!");
+
+        // //     // removes spinner
+        // //     dispatch(uiStopLoading());
+        // // })
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     console.log(parsedRes);
+        //     dispatch(uiStopLoading());
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        //     alert("Something went wrong, please try again!");
+        //     dispatch(uiStopLoading());
+        // });
+
+        // Replaced for Module 11: Auth Tokens
         dispatch(uiStartLoading());
-        fetch("https://us-central1-reactnativepract-1556642515054.cloudfunctions.net/storeImage", {
-            method: "POST",
-            body: JSON.stringify({
-                image: image.base64
-            })
+        dispatch(authGetToken())
+        .catch(() => {
+            alert("No valid token found!");
+        })
+        .then(token => {
+            return fetch(
+                "https://us-central1-reactnativepract-1556642515054.cloudfunctions.net/storeImage",
+                {
+                    method: "POST",
+                    body: JSON.stringify({
+                        image: image.base64
+                    })
+                }
+            );
         })
         .catch(err => {
             console.log(err);
-            // not the best error handler, but better than staying silent
             alert("Something went wrong, please try again!");
             dispatch(uiStopLoading());
         })
@@ -99,18 +151,14 @@ export const addPlace = (placeName, location, image) => {
                 location: location,
                 image: parsedRes.imageUrl
             };
-            return fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json", {
-                method: "POST",
-                body: JSON.stringify(placeData)
-            })
+            return fetch(
+                "https://reactnativepract-1556642515054.firebaseio.com/places.json",
+                {
+                    method: "POST",
+                    body: JSON.stringify(placeData)
+                }
+            );
         })
-        // .catch(err => {
-        //     console.log(err);
-        //     alert("Something went wrong, please try again!");
-
-        //     // removes spinner
-        //     dispatch(uiStopLoading());
-        // })
         .then(res => res.json())
         .then(parsedRes => {
             console.log(parsedRes);
@@ -127,32 +175,62 @@ export const addPlace = (placeName, location, image) => {
 // Added getPlaces() and setPlaces() in Module 10: HTTP Requests
 export const getPlaces = () => {
     return dispatch => {
-        fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json")
-            // .catch(err => {
-            //     alert("Something went wrong, sorry :/");
-            //     console.log(err);
-            // })
-            .then(res => res.json())
-            .then(parsedRes => {
-                const places = [];
-                for (let key in parsedRes) {
-                    places.push({
-                        ...parsedRes[key],
-                        image: {
-                            // this is parsedResponse['unique-id-from-firebase'].image
-                            uri: parsedRes[key].image
-                        },
-                        key: key
-                    });
-                }
+        // fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json")
+        //     // .catch(err => {
+        //     //     alert("Something went wrong, sorry :/");
+        //     //     console.log(err);
+        //     // })
+        //     .then(res => res.json())
+        //     .then(parsedRes => {
+        //         const places = [];
+        //         for (let key in parsedRes) {
+        //             places.push({
+        //                 ...parsedRes[key],
+        //                 image: {
+        //                     // this is parsedResponse['unique-id-from-firebase'].image
+        //                     uri: parsedRes[key].image
+        //                 },
+        //                 key: key
+        //             });
+        //         }
 
-                // places will be a JavaScript object where the keys will be the unique IDs from firebase and the values will be the nested objects
-                dispatch(setPlaces(places));
-            })
-            .catch(err => {
-                alert("Something went wrong, sorry :/");
-                console.log(err);
-            });
+        //         // places will be a JavaScript object where the keys will be the unique IDs from firebase and the values will be the nested objects
+        //         dispatch(setPlaces(places));
+        //     })
+        //     .catch(err => {
+        //         alert("Something went wrong, sorry :/");
+        //         console.log(err);
+        //     });
+
+        // Replaced for Module 11: Auth Tokens
+        dispatch(authGetToken())
+        .then(token => {
+            return fetch(
+                "https://reactnativepract-1556642515054.firebaseio.com/places.json?auth=" +
+                token
+            );
+        })
+        .catch(() => {
+            alert("No valid token found!");
+        })
+        .then(res => res.json())
+        .then(parsedRes => {
+            const places = [];
+            for (let key in parsedRes) {
+                places.push({
+                    ...parsedRes[key],
+                    image: {
+                        uri: parsedRes[key].image
+                    },
+                    key: key
+                });
+            }
+            dispatch(setPlaces(places));
+        })
+        .catch(err => {
+            alert("Something went wrong, sorry :/");
+            console.log(err);
+        });
     };
 };
 
@@ -180,16 +258,43 @@ export const deletePlace = (key) => {
     // Modified in Module 10: Assignment 6
     // return dispatch => {} allows you to run asynchronous code
     return dispatch => {
-        dispatch(removePlace(key));
-        // if removing it on the server fails, the front-end will be out of sync, could go into catch black and readd the place
-            // creates a copy of the place
-        fetch("https://reactnativepract-1556642515054.firebaseio.com/places/" + key + ".json", {
-            method: "DELETE"
-        })
+        // Replaced in Module 11: Auth
+        // dispatch(removePlace(key));
+        // // if removing it on the server fails, the front-end will be out of sync, could go into catch black and readd the place
+        //     // creates a copy of the place
+        // fetch("https://reactnativepract-1556642515054.firebaseio.com/places/" + key + ".json", {
+        //     method: "DELETE"
+        // })
+        // // .catch(err => {
+        // //     alert("Something went wrong, sorry :/");
+        // //     console.log(err);
+        // // })
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     console.log("Done!");
+        // })
         // .catch(err => {
         //     alert("Something went wrong, sorry :/");
         //     console.log(err);
-        // })
+        // });
+
+        // For Module 11: Auth Tokens
+        dispatch(authGetToken())
+        .catch(() => {
+            alert("No valid token found!");
+        })
+        .then(token => {
+            dispatch(removePlace(key));
+            return fetch(
+                "https://reactnativepract-1556642515054.firebaseio.com/places/" +
+                key +
+                ".json?auth=" +
+                token,
+                {
+                    method: "DELETE"
+                }
+            );
+        })
         .then(res => res.json())
         .then(parsedRes => {
             console.log("Done!");
