@@ -6,7 +6,9 @@ import {
     Button,
     StyleSheet,
     ScrollView,
-    Image } from 'react-native';
+    Image,
+    ActivityIndicator
+} from 'react-native';
 // need connect to connect to redux and be able to patch props
 import { connect } from 'react-redux';
 
@@ -152,6 +154,23 @@ class SharePlaceScreen extends Component {
     };
 
     render() {
+        // Button is for Module 10: HTTP Requests
+        let submitButton = (
+            <Button
+                title="Share the Place!"
+                onPress={this.placeAddedHandler}
+                disabled={
+                    !this.state.controls.placeName.valid ||
+                    !this.state.controls.location.valid ||
+                    !this.state.controls.image.valid
+                }
+            />
+        );
+
+        if (this.props.isLoading) {
+            submitButton = <ActivityIndicator />;
+        }
+
         return (
             // Before Module 7: Styling
             // <View>
@@ -186,7 +205,7 @@ class SharePlaceScreen extends Component {
                         onChangeText={this.placeNameChangedHandler}
                     />
                     <View style={styles.button}>
-                        <Button
+                        {/* Replaced for Module 10: HTTP Requests <Button
                             title="Share the Place!"
                             onPress={this.placeAddedHandler}
                             disabled={
@@ -196,7 +215,9 @@ class SharePlaceScreen extends Component {
                                 // prevents submission if the image is invalid
                                 !this.state.controls.image.valid
                             }
-                        />
+                        /> */}
+
+                        {submitButton}
                     </View>
                 </View>
             </ScrollView>
@@ -225,6 +246,13 @@ const styles = StyleSheet.create({
     }
 });
 
+// Added mapStateToProps in Module 10: HTTP Requests
+const mapStateToProps = state => {
+    return {
+        isLoading: state.ui.isLoading
+    };
+};
+
 const mapDispatchToProps = dispatch => {
     // return {
     //     onAddPlace: (placeName) => dispatch(addPlace(placeName))
@@ -245,4 +273,6 @@ const mapDispatchToProps = dispatch => {
 
 // export default SharePlaceScreen;
 // null replaces MmpStatesToProps since we don't need it here
-export default connect(null, mapDispatchToProps)(SharePlaceScreen);
+// export default connect(null, mapDispatchToProps)(SharePlaceScreen);
+// For Module 10: HTTP Requests
+export default connect(mapStateToProps, mapDispatchToProps)(SharePlaceScreen);

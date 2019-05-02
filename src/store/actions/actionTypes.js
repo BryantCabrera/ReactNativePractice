@@ -7,3 +7,7 @@ export const DELETE_PLACE = 'DELETE_PLACE';
 
 // For Module 8: Validation
 export const TRY_AUTH = 'TRY_AUTH';
+
+// For Module 10: HTTP Requests
+export const UI_START_LOADING = "UI_START_LOADING";
+export const UI_STOP_LOADING = "UI_STOP_LOADING";

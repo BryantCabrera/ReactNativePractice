@@ -6,3 +6,4 @@
 export { addPlace, deletePlace } from './places';
 // For Module 8: Validation
 export { tryAuth } from './auth';
+export { uiStartLoading, uiStopLoading } from "./ui";

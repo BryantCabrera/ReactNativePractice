@@ -1,5 +1,6 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from './actionTypes';
 import { ADD_PLACE, DELETE_PLACE } from './actionTypes';
+import { uiStartLoading, uiStopLoading } from './index';
 
 // Before Module 9: Maps
 // export const addPlace = (placeName) => {
@@ -25,10 +26,10 @@ export const addPlace = (placeName, location, image) => {
         // provides a dispatch function
         // lets you run any synchronous or asynchronous code; lets you dispatch code when function is done
     return dispatch => {
-        const placeData = {
-            name: placeName,
-            location: location
-        };
+        // const placeData = {
+        //     name: placeName,
+        //     location: location
+        // };
 
         // // can now nest structures by adding onto the end of the URL
         // // for firebase, you have to add .json to the end of the URL
@@ -49,17 +50,70 @@ export const addPlace = (placeName, location, image) => {
 
 
         // After deploying our cloud function
+        // Uploads the image, then chains until you store the rest of the data on the server, including a link to that store image
+        // fetch("https://us-central1-reactnativepract-1556642515054.cloudfunctions.net/storeImage", {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         image: image.base64
+        //     })
+        // })
+        // .catch(err => console.log(err))
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     // this will take a little long because the image isn't small and the network speed of the simulator isn't too fast
+        //     const placeData = {
+        //         name: placeName,
+        //         location: location,
+        //         image: parsedRes.imageUrl
+        //     };
+        //     return fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json", {
+        //         method: "POST",
+        //         body: JSON.stringify(placeData)
+        //     })
+        // })
+        // .catch(err => console.log(err))
+        // .then(res => res.json())
+        // .then(parsedRes => {
+        //     console.log(parsedRes);
+        // });
+
+        // After connecting to redux
+        // shows spinner
+        dispatch(uiStartLoading());
         fetch("https://us-central1-reactnativepract-1556642515054.cloudfunctions.net/storeImage", {
             method: "POST",
             body: JSON.stringify({
                 image: image.base64
             })
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong, please try again!");
+            dispatch(uiStopLoading());
+        })
         .then(res => res.json())
         .then(parsedRes => {
-            // this will take a little long because the image isn't small and the network speed of the simulator isn't too fast
+            const placeData = {
+                name: placeName,
+                location: location,
+                image: parsedRes.imageUrl
+            };
+            return fetch("https://reactnativepract-1556642515054.firebaseio.com/places.json", {
+                method: "POST",
+                body: JSON.stringify(placeData)
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong, please try again!");
+
+            // removes spinner
+            dispatch(uiStopLoading());
+        })
+        .then(res => res.json())
+        .then(parsedRes => {
             console.log(parsedRes);
+            dispatch(uiStopLoading());
         });
     };
 };
