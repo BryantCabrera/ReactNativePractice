@@ -135,7 +135,7 @@ export const authGetToken = () => {
                 // Added in Module 11: when connecting to AsyncStorage
                 // gets token from storage in case it is missing from redux
                 let fetchedToken;
-                
+
                 AsyncStorage.getItem("rnp:auth:token")
                 .catch(err => reject())
                 .then(tokenFromStorage => {
@@ -204,5 +204,14 @@ export const authAutoSignIn = () => {
             startMainTabs();
         })
         .catch(err => console.log("Failed to fetch token!"));
+    };
+};
+
+// not strictly required because it doesn't take too much space, but do it anyway
+export const authClearStorage = () => {
+    // dispatch doesn't do anything here, it's just a helper function, either way, it's ok
+    return dispatch => {
+        AsyncStorage.removeItem("rnp:auth:token");
+        AsyncStorage.removeItem("rnp:auth:expiryDate");
     };
 };
