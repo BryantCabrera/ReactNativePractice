@@ -1,6 +1,8 @@
 // AsyncStorage is a react native component that helps you store key value pairs
     // Will automatically pick the right storage depending on what system it’s running on
         // For Android, it will pick SQLite
+// ** REACT UPDATE: AsyncStorage has been extracted from react-native core and will be removed
+    // It can now be installed and imported from ‘@react-native - community / async - storage’ instead of ‘react - native’
 import { AsyncStorage } from "react-native";
 
 import { TRY_AUTH, AUTH_SET_TOKEN, AUTH_REMOVE_TOKEN } from './actionTypes';
@@ -237,14 +239,11 @@ export const authGetToken = () => {
 export const authStoreToken = (token, expiresIn, refreshToken) => {
     return dispatch => {
         const now = new Date();
-        const expiryDate = now.getTime() + expiresIn * 1000;
-
-        dispatch(authSetToken(token, expiryDate));
-
-        const now = new Date();
         // multiply by 1000 because it is in milliseconds
         const expiryDate = now.getTime() + expiresIn * 1000;
         // check it with console.log(now, new Date(expiryDate));
+
+        dispatch(authSetToken(token, expiryDate));
 
         // setItem can be anything you name it, any string you want, just a clear identifier
             // AsyncStorage only accepts strings, so we need .toString()

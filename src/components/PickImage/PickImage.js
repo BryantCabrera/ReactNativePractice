@@ -13,7 +13,8 @@ class PickImage extends Component {
     pickImageHandler = () => {
         // arguments: title, response
         // response can then be handled in arrow function body
-        ImagePicker.showImagePicker({ title: "Pick an Image" }, res => {
+        // can also pass max width and height property in object in parameter
+        ImagePicker.showImagePicker({ title: "Pick an Image", maxWidth: 800, maxHeight: 600 }, res => {
             // all properties manged by ImagePicker library
             if (res.didCancel) {
                 console.log("User cancelled!");
