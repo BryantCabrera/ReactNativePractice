@@ -7,7 +7,14 @@ import ImagePicker from "react-native-image-picker";
 
 class PickImage extends Component {
     state = {
-        pickedImaged: null
+        pickedImage: null
+    }
+
+    // Added in Module 12: Polish
+    reset = () => {
+        this.setState({
+            pickedImage: null
+        });
     }
 
     pickImageHandler = () => {
@@ -23,7 +30,7 @@ class PickImage extends Component {
             } else {
                 this.setState({
                     // this is because image src in the render needs an object which has a uri property
-                    pickedImaged: { uri: res.uri }
+                    pickedImage: { uri: res.uri }
                 });
 
                 // forwards object to store
@@ -40,7 +47,7 @@ class PickImage extends Component {
             <View style={styles.container}>
                 <View style={styles.placeholder}>
                     {/* No longer needed after Module 9: Image Picker <Image source={imagePlaceholder} style={styles.previewImage} /> */}
-                    <Image source={this.state.pickedImaged} style={styles.previewImage} />
+                    <Image source={this.state.pickedImage} style={styles.previewImage} />
                 </View>
                 <View style={styles.button}>
                     {/* No longer needed after Module 9: Image Picker <Button title="Pick Image" onPress={() => alert('Pick Image!')} /> */}

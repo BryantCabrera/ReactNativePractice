@@ -35,30 +35,31 @@ class SharePlaceScreen extends Component {
         navBarButtonColor: "orange"
     }
 
-    state = {
-        // placeName: ""
+    // Removed in Module 12: Polish
+    // state = {
+    //     // placeName: ""
 
-        // For Module 8: Validation
-        controls: {
-            placeName: {
-                value: "",
-                valid: false,
-                touched: false,
-                validationRules: {
-                    notEmpty: true
-                }
-            },
-            location: {
-                // it will then be an object with latitude and longitude
-                value: null,
-                valid: false
-            },
-            image: {
-                value: null,
-                valid: false
-            }
-        }
-    };
+    //     // For Module 8: Validation
+    //     controls: {
+    //         placeName: {
+    //             value: "",
+    //             valid: false,
+    //             touched: false,
+    //             validationRules: {
+    //                 notEmpty: true
+    //             }
+    //         },
+    //         location: {
+    //             // it will then be an object with latitude and longitude
+    //             value: null,
+    //             valid: false
+    //         },
+    //         image: {
+    //             value: null,
+    //             valid: false
+    //         }
+    //     }
+    // };
 
     constructor(props) {
         super(props);
@@ -66,6 +67,34 @@ class SharePlaceScreen extends Component {
         // Here, we specify a navigation method whenever a navigation event occurs
         this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
     }
+
+    // Added componentWillMount and reset() in Module 12: Polish
+    componentWillMount() {
+        this.reset();
+    }
+
+    reset = () => {
+        this.setState({
+            controls: {
+                placeName: {
+                    value: "",
+                    valid: false,
+                    touched: false,
+                    validationRules: {
+                        notEmpty: true
+                    }
+                },
+                location: {
+                    value: null,
+                    valid: false
+                },
+                image: {
+                    value: null,
+                    valid: false
+                }
+            }
+        });
+    };
 
     // arrow function syntax lets you avoid binding "this"
     onNavigatorEvent = event => {
@@ -151,6 +180,11 @@ class SharePlaceScreen extends Component {
             this.state.controls.location.value,
             this.state.controls.image.value
         );
+
+        // Added in Module 12: Polish
+        this.reset();
+        this.imagePicker.reset();
+        this.locationPicker.reset();
     };
 
     render() {
@@ -184,8 +218,12 @@ class SharePlaceScreen extends Component {
                     <MainText>
                         <HeadingText>Share a Place with us!</HeadingText>
                     </MainText>
-                    <PickImage onImagePicked={this.imagePickedHandler} />
-                    <PickLocation onLocationPick={this.locationPickedHandler} />
+                    <PickImage
+                        onImagePicked={this.imagePickedHandler}
+                    />
+                    <PickLocation
+                        onLocationPick={this.locationPickedHandler}
+                    />
                     {/* Moved to PickImage.js <View style={styles.placeholder}>
                         <Image source={imagePlaceholder} style={styles.previewImage} />
                     </View>
