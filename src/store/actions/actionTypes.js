@@ -2,6 +2,7 @@
 // export const ADD_PLACE = 'ADD_PLACE';
 // export const DELETE_PLACE = 'DELETE_PLACE';
 export const SET_PLACES = "SET_PLACES";
+export const REMOVE_PLACE = "REMOVE_PLACE";
 // Added in Module 12: Polish
 export const PLACE_ADDED = "PLACE_ADDED";
 export const START_ADD_PLACE = "START_ADD_PLACE";
