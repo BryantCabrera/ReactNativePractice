@@ -31,12 +31,25 @@ class FindPlaceScreen extends Component {
     }
 
     // Added componentDidMount in Module 10: HTTP Requests
-    componentDidMount() {
-        this.props.onLoadPlaces();
-    }
+    // Removed in Module 12: Polish
+    // componentDidMount() {
+    //     this.props.onLoadPlaces();
+    // }
 
     // arrow function syntax lets you avoid binding "this"
     onNavigatorEvent = event => {
+        // Added in Module 12: Polish
+        if (event.type === "ScreenChangedEvent") {
+            if (event.id === "willAppear") {
+                this.props.onLoadPlaces();
+
+                // This makes the "Find Places" load screen appear again, but we commented it out because we don't want it for our particular case
+                // this.setState({
+                //   placesLoaded: false
+                // });
+            }
+        }
+
         // these types are ids defined in startMainTabs.js leftButtons property
         if (event.type === "NavBarButtonPress") {
             if (event.id === "sideDrawerToggle") {
