@@ -181,7 +181,10 @@ export const addPlace = (placeName, location, image) => {
         .then(res => res.json())
         .then(parsedRes => {
             console.log(parsedRes);
+
             dispatch(uiStopLoading());
+            // Added in Module 12: Polish
+            dispatch(placeAdded());
         })
         .catch(err => {
             console.log(err);

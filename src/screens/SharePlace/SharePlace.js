@@ -25,6 +25,8 @@ import HeadingText from "../../components/UI/HeadingText/HeadingText";
 import PickImage from "../../components/PickImage/PickImage";
 import PickLocation from "../../components/PickLocation/PickLocation";
 import validate from "../../utility/validation";
+// Added in Module 12: Polish
+import { startAddPlace } from "../../store/actions/index";
 
 //don't need to register this as a component for navigation because you are embedding it into a screen, not loading it as a screen
 
@@ -96,8 +98,25 @@ class SharePlaceScreen extends Component {
         });
     };
 
+    componentDidUpdate() {
+        if (this.props.placeAdded) {
+            this.props.navigator.switchToTab({ tabIndex: 0 });
+
+            // Should do this in a different place using a react native navigation hook
+            // this.props.onStartAddPlace();
+        }
+    }
+
     // arrow function syntax lets you avoid binding "this"
     onNavigatorEvent = event => {
+        // Added in Module 12: Polish to redirect user and make other tab functionalities work on tab change by resetting placeAdded prop on store
+        if (event.type === "ScreenChangedEvent") {
+            if (event.id === "willAppear") {
+                // resets placeAdded prop
+                this.props.onStartAddPlace();
+            }
+        }
+
         // these types are ids defined in startMainTabs.js leftButtons property
         if (event.type === "NavBarButtonPress") {
             if (event.id === "sideDrawerToggle") {
@@ -292,7 +311,9 @@ const styles = StyleSheet.create({
 // Added mapStateToProps in Module 10: HTTP Requests
 const mapStateToProps = state => {
     return {
-        isLoading: state.ui.isLoading
+        isLoading: state.ui.isLoading,
+        // Added in Module 12: Polish
+        placeAdded: state.places.placeAdded
     };
 };
 
@@ -310,7 +331,9 @@ const mapDispatchToProps = dispatch => {
     // For Module 9: ImagePicker
     // also need to edit /store/actions/places.js
     return {
-        onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image))
+        onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
+        // Added on Module 12: Polish
+        onStartAddPlace: () => dispatch(startAddPlace())
     };
 };
 
