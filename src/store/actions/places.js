@@ -9,6 +9,13 @@ import {
 } from './actionTypes';
 import { uiStartLoading, uiStopLoading, authGetToken } from './index';
 
+// Added in Module 12: Polish
+export const startAddPlace = () => {
+    return {
+        type: START_ADD_PLACE
+    };
+};
+
 // Before Module 9: Maps
 // export const addPlace = (placeName) => {
 //     return {

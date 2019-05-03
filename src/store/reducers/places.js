@@ -5,6 +5,7 @@ import {
     SET_PLACES,
     REMOVE_PLACE,
     PLACE_ADDED,
+    START_ADD_PLACE
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -71,6 +72,11 @@ const reducer = (state = initialState, action) => {
         //         selectedPlace: null
         //     };
         // Added in Module 12: Polish
+        case START_ADD_PLACE:
+            return {
+                ...state,
+                placeAdded: false
+            };
         case PLACE_ADDED:
             return {
                 ...state,
