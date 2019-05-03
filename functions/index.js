@@ -1,3 +1,5 @@
+// firebase only looks at this functions/index.js file
+
 const functions = require('firebase-functions');
 // admin added in Module 11: Auth Tokens
 // admin is provided by firebase-admin to let us validate tokens
@@ -104,7 +106,8 @@ exports.storeImage = functions.https.onRequest((request, response) => {
                                 "/o/" +
                                 encodeURIComponent(file.name) +
                                 "?alt=media&token=" +
-                                uuid
+                                uuid,
+                            imagePath: "/places/" + uuid + ".jpg"
                         });
                     } else {
                         console.log(err);
@@ -119,3 +122,18 @@ exports.storeImage = functions.https.onRequest((request, response) => {
         });
     });
 });
+
+exports.deleteImage = functions.database
+    .ref("/places/{placeId}")
+    .onDelete(snapshot => {
+        // if we just used .data, it would refer to the data after everything was deleted.  So, we use .previous to get the data before the delete has occurred.  An earlier "snapshot".
+        // This was the old way that won't work anymore, it's deprecated! : const placeData = event.data.previous.val();
+        const placeData = snapshot.val();
+        const imagePath = placeData.imagePath;
+
+        const bucket = gcs.bucket("reactnativepract-1556642515054.appspot.com");
+
+        // the following returns a promise which we can then chain to .then() and .catch()
+        // need to return it because cloud functions that do something asynchronous need to return a promise so the function knows when it's done, otherwise it might shut down too early and cancel your operation
+        return bucket.file(imagePath).delete();
+    });

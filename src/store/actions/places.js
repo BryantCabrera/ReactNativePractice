@@ -175,7 +175,8 @@ export const addPlace = (placeName, location, image) => {
             const placeData = {
                 name: placeName,
                 location: location,
-                image: parsedRes.imageUrl
+                image: parsedRes.imageUrl,
+                imagePath: parsedRes.imagePath
             };
             return fetch(
                 "https://reactnativepract-1556642515054.firebaseio.com/places.json?auth=" +
@@ -334,7 +335,7 @@ export const deletePlace = (key) => {
         })
         .then(token => {
             dispatch(removePlace(key));
-            
+
             return fetch(
                 "https://reactnativepract-1556642515054.firebaseio.com/places/" +
                 key +
