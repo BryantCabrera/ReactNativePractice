@@ -185,6 +185,9 @@ class SharePlaceScreen extends Component {
         this.reset();
         this.imagePicker.reset();
         this.locationPicker.reset();
+
+        // Alternate way to tab, but immediately goes there without waiting for the Place to add/create
+        // this.props.navigator.switchToTab({tabIndex: 0});
     };
 
     render() {
@@ -220,9 +223,11 @@ class SharePlaceScreen extends Component {
                     </MainText>
                     <PickImage
                         onImagePicked={this.imagePickedHandler}
+                        ref={ref => (this.imagePicker = ref)}
                     />
                     <PickLocation
                         onLocationPick={this.locationPickedHandler}
+                        ref={ref => (this.locationPicker = ref)}
                     />
                     {/* Moved to PickImage.js <View style={styles.placeholder}>
                         <Image source={imagePlaceholder} style={styles.previewImage} />

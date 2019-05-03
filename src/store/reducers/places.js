@@ -1,9 +1,16 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from '../actions/actionTypes';
-import { ADD_PLACE, DELETE_PLACE, SET_PLACES, REMOVE_PLACE } from '../actions/actionTypes';
+import {
+    ADD_PLACE,
+    DELETE_PLACE,
+    SET_PLACES,
+    REMOVE_PLACE,
+    PLACE_ADDED,
+} from '../actions/actionTypes';
 
 const initialState = {
-    places: []
+    places: [],
     // selectedPlace: null
+    placeAdded: false
 }
 
 //state is the old state
@@ -63,6 +70,12 @@ const reducer = (state = initialState, action) => {
         //         ...state,
         //         selectedPlace: null
         //     };
+        // Added in Module 12: Polish
+        case PLACE_ADDED:
+            return {
+                ...state,
+                placeAdded: true
+            };
         default:
             return state;
     }

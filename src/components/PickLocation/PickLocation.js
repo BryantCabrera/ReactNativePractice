@@ -3,21 +3,44 @@ import { View, Image, Button, StyleSheet, Text, Dimensions } from "react-native"
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 class PickLocation extends Component {
-    state = {
-        focusedLocation: {
-            // region is latitude, longitutde, the 2 deltas of these properties;  a region is a single point in a square
-            // make sure you spell “longitude” and “latitude” correctly
-            latitude: 37.7900352,
-            longitude: -122.4013726,
-            latitudeDelta: 0.0122,
-            // calculates aspect ratio of our device dynamically
-            longitudeDelta:
-                Dimensions.get("window").width /
-                Dimensions.get("window").height *
-                0.0122
-        },
-        locationChosen: false
-    };
+    // state = {
+    //     focusedLocation: {
+    //         // region is latitude, longitutde, the 2 deltas of these properties;  a region is a single point in a square
+    //         // make sure you spell “longitude” and “latitude” correctly
+    //         latitude: 37.7900352,
+    //         longitude: -122.4013726,
+    //         latitudeDelta: 0.0122,
+    //         // calculates aspect ratio of our device dynamically
+    //         longitudeDelta:
+    //             Dimensions.get("window").width /
+    //             Dimensions.get("window").height *
+    //             0.0122
+    //     },
+    //     locationChosen: false
+    // };
+
+    // Added in Module 12: Polish
+    componentWillMount() {
+        this.reset();
+    }
+
+    reset = () => {
+        this.setState({
+            focusedLocation: {
+                // region is latitude, longitutde, the 2 deltas of these properties;  a region is a single point in a square
+                // make sure you spell “longitude” and “latitude” correctly
+                latitude: 37.7900352,
+                longitude: -122.4013726,
+                latitudeDelta: 0.0122,
+                // calculates aspect ratio of our device dynamically
+                longitudeDelta:
+                    Dimensions.get("window").width /
+                    Dimensions.get("window").height *
+                    0.0122
+            },
+            locationChosen: false
+        });
+    }
 
     // Uses user data to bind data to the map user clicks on
     pickLocationHandler = event => {
@@ -93,6 +116,8 @@ class PickLocation extends Component {
                     initialRegion={this.state.focusedLocation}
                     // can now omit this region property because we will animate to it
                     // region={this.state.focusedLocation}
+                    // readded region property in Module 12: Polish because we want to reset the MapView once we've successfully shared a place
+                    region={!this.state.locationChosen ? this.state.focusedLocation : null}
                     style={styles.map}
                     onPress={this.pickLocationHandler}
                     // react generates default parameter ref (reference) then you can bind some property of our class to this reference

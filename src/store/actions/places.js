@@ -1,5 +1,12 @@
 // import { ADD_PLACE, DELETE_PLACE, SELECT_PLACE, DESELECT_PLACE } from './actionTypes';
-import { ADD_PLACE, DELETE_PLACE, SET_PLACES, REMOVE_PLACE } from './actionTypes';
+import {
+    ADD_PLACE,
+    DELETE_PLACE,
+    SET_PLACES,
+    REMOVE_PLACE,
+    PLACE_ADDED,
+    START_ADD_PLACE
+} from './actionTypes';
 import { uiStartLoading, uiStopLoading, authGetToken } from './index';
 
 // Before Module 9: Maps
@@ -174,6 +181,13 @@ export const addPlace = (placeName, location, image) => {
             alert("Something went wrong, please try again!");
             dispatch(uiStopLoading());
         });
+    };
+};
+
+// Added in Module 12: Polish; redirects to new tab
+export const placeAdded = () => {
+    return {
+        type: PLACE_ADDED
     };
 };
 
