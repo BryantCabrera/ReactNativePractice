@@ -17,7 +17,7 @@ const validate = (val, rules, connectedValue) => {
                 break;
             default:
                 isValid = true;
-            }
+        }
     }
 
     return isValid;

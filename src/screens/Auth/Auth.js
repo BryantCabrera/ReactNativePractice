@@ -185,7 +185,7 @@ class AuthScreen extends Component {
     render() {
         let headingText = null;
         let confirmPasswordControl = null;
-        // only want to render this if we are nto waiting for our request to finish
+        // only want to render this if we are not waiting for our request to finish
         let submitButton = (
             <ButtonWithBackground
                 color="#29aaf4"
